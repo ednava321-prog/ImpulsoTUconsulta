@@ -17,8 +17,14 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--t1);font-size:15px;}
 
-/* ── LOGIN ── */
-#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+#loading-screen{position:fixed;inset:0;background:var(--green);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;}
+#loading-screen .logo{font-size:28px;font-weight:800;color:white;letter-spacing:-0.02em;margin-bottom:8px;}
+#loading-screen .logo span{color:#7ecf9a;}
+#loading-screen .sub{font-size:13px;color:rgba(255,255,255,0.5);}
+.spinner{width:24px;height:24px;border:3px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;margin-top:20px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+#login-screen{min-height:100vh;display:none;align-items:center;justify-content:center;padding:20px;}
 .login-card{background:white;border:1px solid var(--bord);border-radius:20px;padding:32px 28px;width:100%;max-width:380px;}
 .login-logo{font-size:22px;font-weight:800;color:var(--green);margin-bottom:4px;letter-spacing:-0.02em;}
 .login-logo span{color:var(--gm);}
@@ -27,7 +33,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .client-btn{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid var(--bord);border-radius:12px;background:white;cursor:pointer;text-align:left;width:100%;transition:all 0.15s;}
 .client-btn:hover{border-color:var(--gm);background:var(--gl);}
 .client-btn.agencia{border-color:var(--pb);background:var(--pl);}
-.client-btn.agencia:hover{background:#e4dcfc;}
 .cb-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;}
 .cb-name{font-size:14px;font-weight:600;color:var(--t1);}
 .cb-esp{font-size:12px;color:var(--t3);}
@@ -38,7 +43,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .btn-login{width:100%;padding:13px;border-radius:12px;background:var(--green);color:white;font-size:15px;font-weight:700;border:none;cursor:pointer;margin-top:8px;}
 .btn-login:active{transform:scale(0.98);}
 
-/* ── APP ── */
 #app{display:none;min-height:100vh;}
 .header{background:var(--green);padding:13px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 .h-logo{font-size:14px;font-weight:700;color:white;}
@@ -55,7 +59,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tab.active{color:var(--green);border-bottom-color:var(--green);}
 .content{padding:12px 14px 100px;}
 
-/* ── ALERTS ── */
 .alert{display:flex;gap:8px;padding:10px 12px;border-radius:10px;border:1px solid;margin-bottom:10px;font-size:13px;line-height:1.4;}
 .alert.red{background:var(--rl);border-color:var(--rb);color:var(--red);}
 .alert.amb{background:var(--al);border-color:var(--ab);color:var(--amb);}
@@ -64,7 +67,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .alert.purple{background:var(--pl);border-color:var(--pb);color:var(--purple);}
 .alert strong{font-weight:600;}
 
-/* ── METRICS ── */
 .mg{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px;}
 .mc{background:white;border:1px solid var(--bord);border-radius:var(--r);padding:12px 14px;}
 .mc.amb{background:var(--al);border-color:var(--ab);}
@@ -82,7 +84,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .mc .sub{font-size:11px;color:var(--t2);margin-top:3px;}
 .section-lbl{font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:0.06em;margin:16px 0 8px;}
 
-/* ── PATIENT CARDS ── */
 .pac-card{background:white;border:1px solid var(--bord);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;cursor:pointer;}
 .pac-card:active{transform:scale(0.98);}
 .pc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:4px;}
@@ -92,7 +93,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tag-camp{background:var(--pl);color:var(--purple);border:1px solid var(--pb);font-size:11px;border-radius:6px;padding:3px 7px;font-weight:600;}
 .time{font-size:11px;color:var(--t3);margin-left:auto;}
 
-/* ── PILLS ── */
 .pill{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px;border:1px solid;white-space:nowrap;}
 .p-nuevo{background:var(--al);color:var(--amb);border-color:var(--ab);}
 .p-agendado{background:var(--bl);color:var(--blue);border-color:var(--bb);}
@@ -101,7 +101,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .p-cancelado{background:var(--rl);color:var(--red);border-color:var(--rb);}
 .p-noperfilado{background:var(--bg);color:var(--t3);border-color:var(--bord);}
 
-/* ── CALENDAR ── */
 .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
 .cal-nav{background:none;border:1.5px solid var(--bord2);border-radius:8px;padding:6px 12px;font-size:14px;cursor:pointer;color:var(--t1);}
 .cal-title{font-size:15px;font-weight:700;}
@@ -121,25 +120,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .cita-name{font-size:13px;font-weight:600;}
 .cita-det{font-size:11px;color:var(--t3);}
 
-/* ── REPORTE ── */
 .rep-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--bord);gap:12px;}
 .rep-row:last-child{border-bottom:none;}
 .rep-lbl{font-size:14px;color:var(--t1);font-weight:500;}
 .rep-ctrl{display:flex;align-items:center;gap:8px;}
 .rep-num{font-size:22px;font-weight:700;min-width:40px;text-align:center;}
 .rep-btn{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--bord2);background:white;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--t1);}
-.rep-btn:active{transform:scale(0.92);background:var(--bg);}
+.rep-btn:active{transform:scale(0.92);}
 .rep-btn.plus{border-color:var(--gb);color:var(--green);}
 .rep-btn.minus{border-color:var(--rb);color:var(--red);}
 
-/* ── AGENCIA CARDS ── */
-.ag-card{background:white;border:1px solid var(--bord);border-radius:var(--r);padding:14px;margin-bottom:10px;cursor:pointer;}
-.ag-card:active{transform:scale(0.98);}
-.ag-card.warn{border-color:var(--rb);}
+.ag-card{background:white;border:1px solid var(--bord);border-radius:var(--r);padding:14px;margin-bottom:10px;}
 .ag-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
 .ag-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;}
 
-/* ── SHEET ── */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;}
 .overlay.open{display:block;}
 .sheet{position:fixed;bottom:0;left:0;right:0;background:white;border-radius:20px 20px 0 0;z-index:400;transform:translateY(100%);transition:transform 0.28s cubic-bezier(0.34,1.36,0.64,1);max-height:93vh;overflow-y:auto;}
@@ -161,7 +155,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .btn-d{background:var(--rl);color:var(--red);border:1.5px solid var(--rb);}
 .btn-full{width:100%;padding:13px;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;border:none;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:8px;}
 
-/* ── ESTADO GRID ── */
 .estado-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;}
 .est-btn{padding:11px 8px;border-radius:10px;border:1.5px solid var(--bord);background:white;font-size:12px;font-weight:600;cursor:pointer;text-align:center;color:var(--t2);}
 .est-btn:active{transform:scale(0.96);}
@@ -172,26 +165,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .est-btn.sel-cancelado{background:var(--rl);border-color:var(--rb);color:var(--red);}
 .est-btn.sel-noperfilado{background:var(--bg);border-color:var(--bord2);color:var(--t3);}
 
-/* ── QUICK TAGS ── */
 .quick-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
 .quick-tag{padding:6px 10px;border-radius:8px;border:1.5px solid var(--bord);background:white;font-size:12px;cursor:pointer;color:var(--t2);}
 .quick-tag:active{transform:scale(0.96);}
-.quick-tag.sel{background:var(--pl);border-color:var(--pb);color:var(--purple);font-weight:700;}
 
-/* ── NUEVO CLIENTE CARD ── */
-.nuevo-cliente-card{background:white;border:2px dashed var(--gb);border-radius:var(--r);padding:16px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:12px;}
-.nuevo-cliente-card:hover{background:var(--gl);}
-.cliente-row{background:white;border:1px solid var(--bord);border-radius:var(--r);padding:13px 14px;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
+.cliente-row{background:white;border:1px solid var(--bord);border-radius:var(--r);padding:13px 14px;margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .cr-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
-.cr-info{flex:1;}
+.cr-info{flex:1;min-width:100px;}
 .cr-name{font-size:14px;font-weight:700;}
 .cr-esp{font-size:12px;color:var(--t3);}
-.cr-pin{font-family:monospace;font-size:14px;font-weight:700;color:var(--green);background:var(--gl);border:1px solid var(--gb);border-radius:8px;padding:4px 10px;letter-spacing:2px;}
-.cr-actions{display:flex;gap:6px;}
+.cr-pin{font-family:monospace;font-size:13px;font-weight:700;color:var(--green);background:var(--gl);border:1px solid var(--gb);border-radius:8px;padding:3px 8px;letter-spacing:2px;}
+.cr-actions{display:flex;gap:5px;flex-wrap:wrap;}
 .cr-btn{padding:6px 10px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;border:none;}
 .cr-btn.edit{background:var(--al);color:var(--amb);}
 .cr-btn.del{background:var(--rl);color:var(--red);}
 .cr-btn.eye{background:var(--bl);color:var(--blue);}
+
+.color-opt{width:32px;height:32px;border-radius:50%;cursor:pointer;transition:transform 0.15s;}
+.color-opt:active{transform:scale(0.9);}
+.color-opt.sel{outline:3px solid var(--green);outline-offset:2px;}
 
 .fab{position:fixed;bottom:24px;right:20px;width:56px;height:56px;border-radius:50%;background:var(--green);color:white;font-size:26px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(26,74,46,0.35);cursor:pointer;border:none;z-index:200;}
 .fab:active{transform:scale(0.92);}
@@ -205,22 +197,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </head>
 <body>
 
-<!-- ════ LOGIN ════ -->
-<div id="login-screen">
+<div id="loading-screen">
+  <div class="logo">Impulso<span>Tu</span>Consulta</div>
+  <div class="sub">Conectando...</div>
+  <div class="spinner"></div>
+</div>
+
+<div id="login-screen" style="display:none;">
   <div class="login-card">
     <div class="login-logo">Impulso<span>Tu</span>Consulta</div>
     <div class="login-sub">Ingresa tu PIN para acceder</div>
     <div class="login-clients" id="login-clients"></div>
     <div class="login-divider">o escribe tu PIN</div>
-    <input class="fi" id="pin-input" type="password" inputmode="numeric" placeholder="PIN de acceso" maxlength="6" style="margin-bottom:8px;">
+    <input class="fi" id="pin-input" type="password" inputmode="numeric" placeholder="PIN de acceso" maxlength="8" style="margin-bottom:8px;">
     <button class="btn-login" onclick="loginConPin()">Entrar →</button>
-    <div style="margin-top:12px;text-align:center;font-size:11px;color:var(--t3);">
-      Cada cuenta solo ve sus propios datos
-    </div>
+    <div style="margin-top:12px;text-align:center;font-size:11px;color:var(--t3);">Cada cuenta solo ve sus propios datos</div>
   </div>
 </div>
 
-<!-- ════ APP ════ -->
 <div id="app">
   <div class="header">
     <div class="h-logo">Impulso<span>Tu</span>Consulta</div>
@@ -237,7 +231,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <div class="overlay" id="overlay" onclick="cerrarSheets()"></div>
 
-<!-- ════ SHEET: NUEVO PACIENTE ════ -->
+<!-- SHEET: NUEVO PACIENTE -->
 <div class="sheet" id="sheet-nuevo">
   <div class="sheet-handle"></div>
   <div class="sheet-head">
@@ -246,7 +240,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
   <div class="sheet-body">
     <div class="fi-row">
-      <div class="fg"><label class="fl">Nombre *</label><input class="fi" id="f-nom" placeholder="Ej. María González"></div>
+      <div class="fg"><label class="fl">Nombre *</label><input class="fi" id="f-nom" placeholder="María González"></div>
       <div class="fg"><label class="fl">Teléfono</label><input class="fi" id="f-tel" type="tel" placeholder="667 123 4567"></div>
     </div>
     <div class="fg">
@@ -256,7 +250,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="fg">
       <label class="fl">Motivo / campaña de origen</label>
       <input class="fi" id="f-trat" placeholder="Escribe el motivo o de qué campaña viene..." style="margin-bottom:6px;">
-      <div style="font-size:11px;color:var(--t3);margin-bottom:6px;">Accesos rápidos (toca para copiar al campo):</div>
+      <div style="font-size:11px;color:var(--t3);margin-bottom:6px;">Accesos rápidos:</div>
       <div class="quick-tags" id="quick-tags-nuevo"></div>
     </div>
     <div id="fecha-nuevo-wrap" class="fg" style="display:none;">
@@ -271,7 +265,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 </div>
 
-<!-- ════ SHEET: DETALLE PACIENTE ════ -->
+<!-- SHEET: DETALLE PACIENTE -->
 <div class="sheet" id="sheet-det">
   <div class="sheet-handle"></div>
   <div class="sheet-head">
@@ -284,30 +278,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="sheet-body">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
       <div class="mc" style="padding:10px 12px;"><div class="lbl">Teléfono</div><div style="font-size:13px;font-weight:600;" id="d-tel">—</div></div>
-      <div class="mc" style="padding:10px 12px;"><div class="lbl">Cita agendada</div><div style="font-size:12px;font-weight:600;" id="d-fecha">Sin cita</div></div>
+      <div class="mc" style="padding:10px 12px;"><div class="lbl">Cita</div><div style="font-size:12px;font-weight:600;" id="d-fecha">Sin cita</div></div>
     </div>
     <div class="fg"><div class="fl">Campaña / motivo</div><div class="nota-box" id="d-trat">—</div></div>
     <div class="fg"><div class="fl">Notas</div><div class="nota-box" id="d-notas">—</div></div>
-    <div class="fg">
-      <div class="fl">Cambiar estado</div>
-      <div class="estado-grid" id="estado-btns-det"></div>
-    </div>
+    <div class="fg"><div class="fl">Cambiar estado</div><div class="estado-grid" id="estado-btns-det"></div></div>
     <div id="fecha-det-wrap" class="fg" style="display:none;">
       <label class="fl">Fecha y hora de cita</label>
       <input class="fi" id="d-fecha-input" type="datetime-local">
     </div>
     <div id="wa-wrap" class="fg" style="display:none;">
       <div class="fl">Recordatorio WhatsApp</div>
-      <button class="btn-full" style="background:#25d366;color:white;border:none;" onclick="abrirWA()">
-        💬 Abrir WhatsApp con mensaje listo
-      </button>
+      <button class="btn-full" style="background:#25d366;color:white;border:none;" onclick="abrirWA()">💬 Abrir WhatsApp con mensaje listo</button>
       <div style="font-size:11px;color:var(--t3);text-align:center;margin-top:4px;">El mensaje ya viene escrito. Solo toca Enviar.</div>
     </div>
     <div class="fg">
       <div class="fl">Google Calendar</div>
-      <button class="btn-full" style="background:#4285f4;color:white;border:none;" onclick="abrirGCal()">
-        📅 Agregar cita a Google Calendar
-      </button>
+      <button class="btn-full" style="background:#4285f4;color:white;border:none;" onclick="abrirGCal()">📅 Agregar cita a Google Calendar</button>
     </div>
   </div>
   <div class="sheet-foot">
@@ -316,7 +303,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 </div>
 
-<!-- ════ SHEET: NUEVO CLIENTE (solo agencia) ════ -->
+<!-- SHEET: NUEVO CLIENTE -->
 <div class="sheet" id="sheet-nuevo-cliente">
   <div class="sheet-handle"></div>
   <div class="sheet-head">
@@ -324,40 +311,32 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <button class="sheet-x" onclick="cerrarSheets()">✕</button>
   </div>
   <div class="sheet-body">
-    <div class="alert purple" style="margin-bottom:16px;">
-      Solo tú puedes agregar clientes. El cliente recibe su PIN y ya puede entrar. Solo verá sus propios datos.
-    </div>
+    <div class="alert purple" style="margin-bottom:16px;">Solo tú puedes agregar clientes. El cliente recibe su PIN y ya puede entrar.</div>
     <div class="fi-row">
       <div class="fg"><label class="fl">Nombre del doctor *</label><input class="fi" id="nc-nombre" placeholder="Dra. García"></div>
       <div class="fg"><label class="fl">Especialidad *</label><input class="fi" id="nc-esp" placeholder="Pediatría"></div>
     </div>
     <div class="fi-row">
-      <div class="fg">
-        <label class="fl">Iniciales (2 letras)</label>
-        <input class="fi" id="nc-ini" placeholder="GP" maxlength="2" style="text-transform:uppercase;">
-      </div>
-      <div class="fg">
-        <label class="fl">PIN de acceso *</label>
-        <input class="fi" id="nc-pin" type="number" inputmode="numeric" placeholder="Ej. 7823" maxlength="8">
-      </div>
+      <div class="fg"><label class="fl">Iniciales (2 letras)</label><input class="fi" id="nc-ini" placeholder="GP" maxlength="2" style="text-transform:uppercase;"></div>
+      <div class="fg"><label class="fl">PIN de acceso *</label><input class="fi" id="nc-pin" type="number" inputmode="numeric" placeholder="Ej. 7823"></div>
     </div>
     <div class="fg">
       <label class="fl">Color del avatar</label>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;" id="color-picker">
-        <div class="color-opt" data-bg="#fdf0ee" data-fg="#8b2020" style="width:32px;height:32px;border-radius:50%;background:#fdf0ee;border:2px solid #f5c0bc;cursor:pointer;" onclick="selColor(this)"></div>
-        <div class="color-opt" data-bg="#e6f1fb" data-fg="#1a3a8a" style="width:32px;height:32px;border-radius:50%;background:#e6f1fb;border:2px solid #c0cef5;cursor:pointer;" onclick="selColor(this)"></div>
-        <div class="color-opt" data-bg="#e1f5ee" data-fg="#085041" style="width:32px;height:32px;border-radius:50%;background:#e1f5ee;border:2px solid #b8d8c4;cursor:pointer;" onclick="selColor(this)"></div>
-        <div class="color-opt" data-bg="#fbeaf0" data-fg="#72243e" style="width:32px;height:32px;border-radius:50%;background:#fbeaf0;border:2px solid #f4c0d1;cursor:pointer;" onclick="selColor(this)"></div>
-        <div class="color-opt" data-bg="#eeedfe" data-fg="#3c3489" style="width:32px;height:32px;border-radius:50%;background:#eeedfe;border:2px solid #c8b8f0;cursor:pointer;" onclick="selColor(this)"></div>
-        <div class="color-opt" data-bg="#fef6ec" data-fg="#633806" style="width:32px;height:32px;border-radius:50%;background:#fef6ec;border:2px solid #f5d8a0;cursor:pointer;" onclick="selColor(this)"></div>
-        <div class="color-opt" data-bg="#eef2fc" data-fg="#1a3a8a" style="width:32px;height:32px;border-radius:50%;background:#eef2fc;border:2px solid #c0cef5;cursor:pointer;" onclick="selColor(this)"></div>
-        <div class="color-opt" data-bg="#e8f4ec" data-fg="#1a4a2e" style="width:32px;height:32px;border-radius:50%;background:#e8f4ec;border:2px solid #b8d8c4;cursor:pointer;" onclick="selColor(this)"></div>
+        <div class="color-opt" data-bg="#fdf0ee" data-fg="#8b2020" style="background:#fdf0ee;border:2px solid #f5c0bc;" onclick="selColor(this)"></div>
+        <div class="color-opt" data-bg="#e6f1fb" data-fg="#1a3a8a" style="background:#e6f1fb;border:2px solid #c0cef5;" onclick="selColor(this)"></div>
+        <div class="color-opt" data-bg="#e1f5ee" data-fg="#085041" style="background:#e1f5ee;border:2px solid #b8d8c4;" onclick="selColor(this)"></div>
+        <div class="color-opt" data-bg="#fbeaf0" data-fg="#72243e" style="background:#fbeaf0;border:2px solid #f4c0d1;" onclick="selColor(this)"></div>
+        <div class="color-opt" data-bg="#eeedfe" data-fg="#3c3489" style="background:#eeedfe;border:2px solid #c8b8f0;" onclick="selColor(this)"></div>
+        <div class="color-opt" data-bg="#fef6ec" data-fg="#633806" style="background:#fef6ec;border:2px solid #f5d8a0;" onclick="selColor(this)"></div>
+        <div class="color-opt" data-bg="#e8f4ec" data-fg="#1a4a2e" style="background:#e8f4ec;border:2px solid #b8d8c4;" onclick="selColor(this)"></div>
+        <div class="color-opt" data-bg="#eef2fc" data-fg="#1a3a8a" style="background:#eef2fc;border:2px solid #c0cef5;" onclick="selColor(this)"></div>
       </div>
     </div>
     <div class="fg">
       <label class="fl">Campañas / tratamientos (uno por línea)</label>
       <textarea class="fi" id="nc-camps" rows="4" placeholder="Ej: Problemas sensoriales&#10;Infección de garganta&#10;Control niño sano&#10;Vacunación"></textarea>
-      <div style="font-size:11px;color:var(--t3);margin-top:4px;">Estos aparecerán como accesos rápidos al registrar un paciente.</div>
+      <div style="font-size:11px;color:var(--t3);margin-top:4px;">Estos aparecen como accesos rápidos al registrar pacientes.</div>
     </div>
   </div>
   <div class="sheet-foot">
@@ -366,7 +345,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 </div>
 
-<!-- ════ SHEET: CAMBIAR PIN DE CLIENTE ════ -->
+<!-- SHEET: CAMBIAR PIN -->
 <div class="sheet" id="sheet-cambiar-pin">
   <div class="sheet-handle"></div>
   <div class="sheet-head">
@@ -381,13 +360,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div style="font-size:13px;color:var(--t2);">PIN actual</div>
       <div style="font-family:monospace;font-size:22px;font-weight:700;color:var(--green);letter-spacing:4px;" id="cp-pin-actual">—</div>
     </div>
-    <div class="fg">
-      <label class="fl">Nuevo PIN</label>
-      <input class="fi" id="cp-nuevo-pin" type="number" inputmode="numeric" placeholder="Ej. 4921" maxlength="8">
-    </div>
-    <div class="alert amb">
-      <strong>Si el cliente termina el contrato:</strong> cambia su PIN y ya no puede entrar. El sistema y los datos quedan bajo tu control.
-    </div>
+    <div class="fg"><label class="fl">Nuevo PIN</label><input class="fi" id="cp-nuevo-pin" type="number" inputmode="numeric" placeholder="Ej. 4921"></div>
+    <div class="alert amb"><strong>Si el cliente termina el contrato:</strong> cambia su PIN y ya no puede entrar. El sistema queda bajo tu control.</div>
   </div>
   <div class="sheet-foot">
     <button class="btn btn-d" style="flex:0.6;" onclick="desactivarCliente()">Desactivar acceso</button>
@@ -397,9 +371,53 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <div id="toast"></div>
 
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAi0XnGnrc6ueNenCYSFcCx9P1TWGbtww8",
+  authDomain: "impulsotuconsulta.firebaseapp.com",
+  projectId: "impulsotuconsulta",
+  storageBucket: "impulsotuconsulta.firebasestorage.app",
+  messagingSenderId: "598396830297",
+  appId: "1:598396830297:web:8088584cd48e79e560a748"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
+
+// ── DB HELPERS ──
+window.dbGet = async (key) => {
+  try {
+    const snap = await getDoc(doc(db, 'data', key));
+    return snap.exists() ? snap.data().value : null;
+  } catch(e) { console.warn('dbGet error', e); return null; }
+};
+
+window.dbSet = async (key, value) => {
+  try {
+    await setDoc(doc(db, 'data', key), { value });
+    return true;
+  } catch(e) { console.warn('dbSet error', e); return false; }
+};
+
+window.dbDel = async (key) => {
+  try {
+    await deleteDoc(doc(db, 'data', key));
+    return true;
+  } catch(e) { console.warn('dbDel error', e); return false; }
+};
+
+// Señal de que Firebase está listo
+window.firebaseReady = true;
+document.dispatchEvent(new Event('firebase-ready'));
+</script>
+
 <script>
 // ══════════════════════════════════════════
-// PIN MAESTRO — CÁMBIALO ANTES DE PUBLICAR
+// PIN MAESTRO
 // ══════════════════════════════════════════
 const PIN_MAESTRO_DEFAULT = '9999';
 let pinMaestro = PIN_MAESTRO_DEFAULT;
@@ -407,7 +425,7 @@ let pinMaestro = PIN_MAESTRO_DEFAULT;
 // ══════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════
-let clientesDB = [];        // clientes dinámicos desde storage
+let clientesDB = [];
 let clienteActual = null;
 let pacientes = [];
 let tabActual = 'resumen';
@@ -424,12 +442,9 @@ let clienteEditandoId = null;
 let clientePinSelId = null;
 
 const ESTADOS = [
-  {v:'nuevo',      lbl:'Interesado'},
-  {v:'agendado',   lbl:'Agendado'},
-  {v:'consulta',   lbl:'En consulta'},
-  {v:'seguimiento',lbl:'Seguimiento'},
-  {v:'cancelado',  lbl:'Cancelado'},
-  {v:'noperfilado',lbl:'No perfilado'},
+  {v:'nuevo',lbl:'Interesado'},{v:'agendado',lbl:'Agendado'},
+  {v:'consulta',lbl:'En consulta'},{v:'seguimiento',lbl:'Seguimiento'},
+  {v:'cancelado',lbl:'Cancelado'},{v:'noperfilado',lbl:'No perfilado'},
 ];
 const PILL = {
   nuevo:'<span class="pill p-nuevo">Interesado</span>',
@@ -447,63 +462,59 @@ function semanaKey(){const d=new Date();const day=d.getDay()||7;d.setDate(d.getD
 function genId(){return 'c'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);}
 
 // ══════════════════════════════════════════
-// STORAGE — clientes dinámicos
+// FIREBASE STORAGE
+// ══════════════════════════════════════════
+async function dbGet(key){ return window.dbGet ? window.dbGet(key) : null; }
+async function dbSet(key, value){ return window.dbSet ? window.dbSet(key, value) : false; }
+async function dbDel(key){ return window.dbDel ? window.dbDel(key) : false; }
+
+function setSyncStatus(on){
+  const d=document.getElementById('sync-dot');
+  if(d){ if(on)d.classList.add('spin'); else d.classList.remove('spin'); }
+}
+
+// ══════════════════════════════════════════
+// CARGAR CLIENTES
 // ══════════════════════════════════════════
 async function cargarClientesDB(){
+  setSyncStatus(true);
   try{
-    const r=await window.storage.get('itc-clientes-db',true);
-    if(r){
-      clientesDB=JSON.parse(r.value);
-    } else {
-      // Primera vez — inicializar con lista vacía, sin clientes default
-      clientesDB=[];
-      await guardarClientesDB();
-    }
-    const rp=await window.storage.get('itc-pin-maestro',true);
-    if(rp) pinMaestro=rp.value;
-  }catch{ if(!clientesDB.length) clientesDB=[]; }
+    const data = await dbGet('clientes');
+    clientesDB = data ? JSON.parse(data) : [];
+    const pm = await dbGet('pin-maestro');
+    if(pm) pinMaestro = pm;
+  }catch(e){
+    console.warn(e);
+    clientesDB = [];
+  }
+  setSyncStatus(false);
 }
 
 async function guardarClientesDB(){
-  try{ await window.storage.set('itc-clientes-db',JSON.stringify(clientesDB),true); }
-  catch(e){console.warn(e);}
-}
-
-function getClientesDefault(){
-  return [
-    {id:'torres',nombre:'Dra. Torres',esp:'Cardiología',pin:'1234',ini:'TC',bg:'#fdf0ee',fg:'#8b2020',activo:true,
-     campanias:['Dolor de pecho','Control hipertensión','Arritmia','Chequeo ejecutivo']},
-    {id:'garcia',nombre:'Dra. García',esp:'Pediatría',pin:'4567',ini:'GP',bg:'#fbeaf0',fg:'#72243e',activo:true,
-     campanias:['Problemas sensoriales','Infección de garganta','Control niño sano','Vacunación']},
-    {id:'ramirez',nombre:'Dr. Ramírez',esp:'Estética',pin:'2345',ini:'RE',bg:'#e6f1fb',fg:'#1a3a8a',activo:true,
-     campanias:['Botox preventivo','Rinoplastia','Rejuvenecimiento','Cuerpo y figura']},
-  ];
+  setSyncStatus(true);
+  await dbSet('clientes', JSON.stringify(clientesDB));
+  setSyncStatus(false);
 }
 
 async function cargarPacientes(){
   setSyncStatus(true);
   try{
-    const r=await window.storage.get('itc-pac-'+clienteActual.id,true);
-    const rr=await window.storage.get('itc-rep-'+clienteActual.id,true);
-    pacientes=r?JSON.parse(r.value):[];
-    reporteDiario=rr?JSON.parse(rr.value):{};
-    nextId=pacientes.length>0?Math.max(...pacientes.map(p=>Number(p.id)||0))+1:1000;
-  }catch{pacientes=[];reporteDiario={};}
+    const p = await dbGet('pac-'+clienteActual.id);
+    const r = await dbGet('rep-'+clienteActual.id);
+    pacientes = p ? JSON.parse(p) : [];
+    reporteDiario = r ? JSON.parse(r) : {};
+    nextId = pacientes.length>0 ? Math.max(...pacientes.map(p=>Number(p.id)||0))+1 : 1000;
+  }catch(e){
+    pacientes=[]; reporteDiario={};
+  }
   setSyncStatus(false);
 }
 
 async function guardarPacientes(){
   setSyncStatus(true);
-  try{
-    await window.storage.set('itc-pac-'+clienteActual.id,JSON.stringify(pacientes),true);
-    await window.storage.set('itc-rep-'+clienteActual.id,JSON.stringify(reporteDiario),true);
-  }catch(e){console.warn(e);}
+  await dbSet('pac-'+clienteActual.id, JSON.stringify(pacientes));
+  await dbSet('rep-'+clienteActual.id, JSON.stringify(reporteDiario));
   setSyncStatus(false);
-}
-
-function setSyncStatus(on){
-  const d=document.getElementById('sync-dot');
-  if(on)d.classList.add('spin');else d.classList.remove('spin');
 }
 
 // ══════════════════════════════════════════
@@ -511,27 +522,25 @@ function setSyncStatus(on){
 // ══════════════════════════════════════════
 function renderLogin(){
   const container=document.getElementById('login-clients');
-  const activos=clientesDB.filter(c=>c.activo);
-  container.innerHTML=activos.map(c=>`
+  container.innerHTML=clientesDB.filter(c=>c.activo).map(c=>`
     <button class="client-btn" onclick="loginDirecto('${c.id}')">
       <div class="cb-av" style="background:${c.bg};color:${c.fg};">${c.ini}</div>
       <div><div class="cb-name">${c.nombre}</div><div class="cb-esp">${c.esp}</div></div>
     </button>`).join('')
-    +`<button class="client-btn agencia" onclick="loginAgencia()">
+    +`<button class="client-btn agencia" onclick="enfocarPin()">
       <div class="cb-av" style="background:#eeedfe;color:#3c3489;">AG</div>
-      <div><div class="cb-name">Panel Agencia</div><div class="cb-esp">Acceso exclusivo</div></div>
+      <div><div class="cb-name">Panel Agencia</div><div class="cb-esp">Solo agencia</div></div>
     </button>`;
+  document.getElementById('loading-screen').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
 }
+
+function enfocarPin(){ document.getElementById('pin-input').focus(); }
 
 function loginDirecto(id){
   const c=clientesDB.find(x=>x.id===id);
   if(c&&c.activo) entrarApp(c);
   else showToast('Cuenta desactivada',true);
-}
-
-function loginAgencia(){
-  document.getElementById('pin-input').focus();
-  showToast('Escribe tu PIN maestro de agencia');
 }
 
 function loginConPin(){
@@ -569,8 +578,7 @@ function renderTabs(){
     ?[{id:'clientes',lbl:'Clientes'},{id:'reportes',lbl:'Reportes'}]
     :[{id:'resumen',lbl:'Resumen'},{id:'pacientes',lbl:'Pacientes'},{id:'calendario',lbl:'Agenda'},{id:'reporte',lbl:'Reporte'}];
   document.getElementById('tabs-bar').innerHTML=tabs.map((t,i)=>
-    `<div class="tab ${i===0?'active':''}" id="tab-${t.id}" onclick="setTab('${t.id}',this)">${t.lbl}</div>`
-  ).join('');
+    `<div class="tab ${i===0?'active':''}" id="tab-${t.id}" onclick="setTab('${t.id}',this)">${t.lbl}</div>`).join('');
   tabActual=tabs[0].id;
   document.getElementById('fab').style.display=(tabActual==='pacientes')?'flex':'none';
   render();
@@ -589,15 +597,14 @@ function setTab(tab,el){
 // ══════════════════════════════════════════
 function render(){
   const c=document.getElementById('content');
-  if(tabActual==='resumen')   c.innerHTML=renderResumen();
-  if(tabActual==='pacientes') c.innerHTML=renderPacientes();
-  if(tabActual==='calendario')c.innerHTML=renderCalendario();
-  if(tabActual==='reporte')   c.innerHTML=renderReporte();
-  if(tabActual==='clientes')  renderClientesAsync();
-  if(tabActual==='reportes')  renderReportesAsync();
+  if(tabActual==='resumen')    c.innerHTML=renderResumen();
+  if(tabActual==='pacientes')  c.innerHTML=renderPacientes();
+  if(tabActual==='calendario') c.innerHTML=renderCalendario();
+  if(tabActual==='reporte')    c.innerHTML=renderReporte();
+  if(tabActual==='clientes')   renderClientesAsync();
+  if(tabActual==='reportes')   renderReportesAsync();
 }
 
-// ── RESUMEN ───────────────────────────────
 function renderResumen(){
   const ps=pacientes;
   const nuevos=ps.filter(p=>p.estado==='nuevo').length;
@@ -611,7 +618,7 @@ function renderResumen(){
   const citasHoy=ps.filter(p=>p.fecha&&p.fecha.startsWith(hoy()));
   let alerts='';
   if(nuevos>=5) alerts+=`<div class="alert amb"><strong>${nuevos} interesados sin agendar.</strong> Contactar hoy.</div>`;
-  if(canc>=3) alerts+=`<div class="alert red"><strong>${canc} cancelaciones esta semana.</strong> Revisar seguimiento.</div>`;
+  if(canc>=3) alerts+=`<div class="alert red"><strong>${canc} cancelaciones.</strong> Revisar seguimiento.</div>`;
   if(citasHoy.length>0) alerts+=`<div class="alert grn"><strong>${citasHoy.length} cita${citasHoy.length>1?'s':''} hoy:</strong> ${citasHoy.map(p=>p.nombre).join(', ')}</div>`;
   return alerts+`
   <div class="mg">
@@ -628,7 +635,6 @@ function renderResumen(){
   ${citasHoy.length>0?`<div class="section-lbl">Citas de hoy</div>`+citasHoy.map(p=>`
     <div class="pac-card" onclick="abrirDetalle('${p.id}')">
       <div class="pc-top"><div class="pc-name">${p.nombre}</div>${PILL[p.estado]||''}</div>
-      <div class="pc-meta">${p.tratamiento||'—'}</div>
       <div class="pc-tags"><span style="font-size:12px;color:var(--green);font-weight:600;">⏰ ${fmtF(p.fecha)}</span></div>
     </div>`).join(''):''}
   <div class="section-lbl">Últimos registrados</div>
@@ -642,7 +648,6 @@ function renderResumen(){
     </div>`).join('')}`;
 }
 
-// ── PACIENTES ────────────────────────────
 function renderPacientes(){
   const grupos=[
     {est:'nuevo',lbl:'Interesados — sin agendar'},
@@ -670,7 +675,6 @@ function renderPacientes(){
   }).join('');
 }
 
-// ── CALENDARIO ───────────────────────────
 function renderCalendario(){
   const dias=['Lu','Ma','Mi','Ju','Vi','Sa','Do'];
   const hdrCells=dias.map(d=>`<div class="cal-day-hdr">${d}</div>`).join('');
@@ -695,7 +699,7 @@ function renderCalendario(){
       <div class="citas-dia">`+citasDia.map(p=>`
         <div class="cita-row" onclick="abrirDetalle('${p.id}')">
           <div class="cita-hora">${p.fecha?new Date(p.fecha).toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}):''}</div>
-          <div class="cita-info"><div class="cita-name">${p.nombre}</div><div class="cita-det">${p.tratamiento||'Sin motivo'}</div></div>
+          <div style="flex:1;"><div class="cita-name">${p.nombre}</div><div class="cita-det">${p.tratamiento||'Sin motivo'}</div></div>
           ${PILL[p.estado]||''}
         </div>`).join('')+'</div>'
     :`<div class="empty" style="padding:20px;"><div class="empty-txt">Sin citas para este día.</div></div>`;
@@ -704,24 +708,22 @@ function renderCalendario(){
     <div class="cal-title">${mesNom.charAt(0).toUpperCase()+mesNom.slice(1)}</div>
     <button class="cal-nav" onclick="cambiarMes(1)">›</button>
   </div>
-  <div class="cal-grid">${hdrCells}${cells}</div>
-  ${citasSection}`;
+  <div class="cal-grid">${hdrCells}${cells}</div>${citasSection}`;
 }
 function selDia(ds){calDiaSel=ds;render();}
 function cambiarMes(dir){calFecha=new Date(calFecha.getFullYear(),calFecha.getMonth()+dir,1);render();}
 
-// ── REPORTE ───────────────────────────────
 function renderReporte(){
   const sw=semanaKey();
   const ps=pacientes;
   const semana=ps.filter(p=>p.ts&&new Date(p.ts).toISOString().slice(0,10)>=sw).length;
-  const keyHoy=hoy();
-  const rd=reporteDiario[keyHoy]||{mensajes:0,agendados:0,consultas:0,cancelados:0,noperfilados:0};
+  const kh=hoy();
+  const rd=reporteDiario[kh]||{mensajes:0,agendados:0,consultas:0,cancelados:0,noperfilados:0};
   const tratCount={};
   ps.forEach(p=>{if(p.tratamiento)tratCount[p.tratamiento]=(tratCount[p.tratamiento]||0)+1;});
   const topTrats=Object.entries(tratCount).sort((a,b)=>b[1]-a[1]).slice(0,5);
   return `
-  <div class="section-lbl">Conteo rápido de hoy — ${new Date().toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'})}</div>
+  <div class="section-lbl">Conteo de hoy — ${new Date().toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'})}</div>
   <div style="background:white;border:1px solid var(--bord);border-radius:var(--r);padding:4px 14px;margin-bottom:14px;">
     ${[
       {k:'mensajes',l:'Mensajes recibidos',c:'var(--blue)'},
@@ -744,7 +746,7 @@ function renderReporte(){
     <div class="mc purple"><div class="lbl">En seguimiento</div><div class="val">${ps.filter(p=>p.estado==='seguimiento').length}</div></div>
     <div class="mc red"><div class="lbl">Cancelados</div><div class="val">${ps.filter(p=>p.estado==='cancelado').length}</div></div>
   </div>
-  ${topTrats.length>0?`<div class="section-lbl">Campañas / motivos más frecuentes</div>
+  ${topTrats.length>0?`<div class="section-lbl">Campañas más frecuentes</div>
   <div style="background:white;border:1px solid var(--bord);border-radius:var(--r);padding:4px 14px;margin-bottom:14px;">`
   +topTrats.map(([t,n])=>`<div class="rep-row"><div class="rep-lbl" style="font-size:13px;">${t}</div><div style="font-size:20px;font-weight:700;color:var(--purple);">${n}</div></div>`).join('')+'</div>':''}
   <button class="btn-full" style="background:var(--green);color:white;border:none;" onclick="copiarReporte()">📋 Copiar reporte del día</button>`;
@@ -765,46 +767,34 @@ function copiarReporte(){
   const ps=pacientes;
   const sw=semanaKey();
   const semana=ps.filter(p=>p.ts&&new Date(p.ts).toISOString().slice(0,10)>=sw).length;
-  const txt=`📊 Reporte diario — ${clienteActual.nombre}\n${new Date().toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}\n${'─'.repeat(38)}\nMensajes recibidos: ${rd.mensajes}\nAgendaron cita: ${rd.agendados}\nFueron a consulta: ${rd.consultas}\nCancelaron: ${rd.cancelados}\nNo perfilados: ${rd.noperfilados}\n${'─'.repeat(38)}\nNuevos esta semana: ${semana}\nEn seguimiento: ${ps.filter(p=>p.estado==='seguimiento').length}\nAgendados activos: ${ps.filter(p=>p.estado==='agendado').length}\n${'─'.repeat(38)}\nImpulsoTuConsulta`;
+  const txt=`📊 Reporte — ${clienteActual.nombre}\n${new Date().toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}\n${'─'.repeat(38)}\nMensajes: ${rd.mensajes} · Agendados: ${rd.agendados} · Consultas: ${rd.consultas}\nCancelados: ${rd.cancelados} · No perfilados: ${rd.noperfilados}\n${'─'.repeat(38)}\nNuevos esta semana: ${semana}\nEn seguimiento: ${ps.filter(p=>p.estado==='seguimiento').length}\nAgendados activos: ${ps.filter(p=>p.estado==='agendado').length}\n${'─'.repeat(38)}\nImpulsoTuConsulta`;
   if(navigator.clipboard) navigator.clipboard.writeText(txt);
   showToast('Reporte copiado ✓');
 }
 
-// ── AGENCIA: CLIENTES ─────────────────────
 async function renderClientesAsync(){
-  document.getElementById('content').innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">Cargando...</div></div>';
+  document.getElementById('content').innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">Cargando clientes...</div></div>';
   const activos=clientesDB.filter(c=>c.activo);
   const desactivos=clientesDB.filter(c=>!c.activo);
-  let html=`
-    <button class="btn-full" style="background:var(--green);color:white;border:none;" onclick="abrirNuevoCliente()">
-      + Agregar nuevo cliente
-    </button>
-    <div class="section-lbl">Clientes activos (${activos.length})</div>`;
-  for(const c of activos){
-    try{
-      const r=await window.storage.get('itc-pac-'+c.id,true);
-      const ps=r?JSON.parse(r.value):[];
-      const sw=semanaKey();
-      const semana=ps.filter(p=>p.ts&&new Date(p.ts).toISOString().slice(0,10)>=sw).length;
+  let html=`<button class="btn-full" style="background:var(--green);color:white;border:none;" onclick="abrirNuevoCliente()">+ Agregar nuevo cliente</button>`;
+
+  if(activos.length===0){
+    html+=`<div class="empty"><div class="empty-ico">👨‍⚕️</div><div class="empty-txt">Sin clientes aún.<br>Agrega tu primer cliente arriba.</div></div>`;
+  } else {
+    html+=`<div class="section-lbl">Clientes activos (${activos.length})</div>`;
+    for(const c of activos){
+      let info=`${c.esp}`;
+      try{
+        const p=await dbGet('pac-'+c.id);
+        const ps=p?JSON.parse(p):[];
+        const sw=semanaKey();
+        const semana=ps.filter(p=>p.ts&&new Date(p.ts).toISOString().slice(0,10)>=sw).length;
+        info=`${c.esp} · ${ps.length} pacientes · ${semana} nuevos/sem`;
+      }catch{}
       html+=`<div class="cliente-row">
         <div class="cr-av" style="background:${c.bg};color:${c.fg};">${c.ini}</div>
-        <div class="cr-info">
-          <div class="cr-name">${c.nombre}</div>
-          <div class="cr-esp">${c.esp} · ${ps.length} pacientes · ${semana} nuevos/sem</div>
-        </div>
-        <div style="font-family:monospace;font-size:13px;font-weight:700;color:var(--green);background:var(--gl);border:1px solid var(--gb);border-radius:8px;padding:3px 8px;letter-spacing:2px;">${c.pin}</div>
-        <div class="cr-actions">
-          <button class="cr-btn eye" onclick="verDatosCliente('${c.id}')">Ver</button>
-          <button class="cr-btn edit" onclick="abrirCambiarPin('${c.id}')">PIN</button>
-          <button class="cr-btn edit" onclick="editarCliente('${c.id}')">✏️</button>
-          <button class="cr-btn del" onclick="borrarClientePermanente('${c.id}','${c.nombre}')">🗑️</button>
-        </div>
-      </div>`;
-    }catch{
-      html+=`<div class="cliente-row">
-        <div class="cr-av" style="background:${c.bg};color:${c.fg};">${c.ini}</div>
-        <div class="cr-info"><div class="cr-name">${c.nombre}</div><div class="cr-esp">${c.esp}</div></div>
-        <div style="font-family:monospace;font-size:13px;font-weight:700;color:var(--green);background:var(--gl);border:1px solid var(--gb);border-radius:8px;padding:3px 8px;letter-spacing:2px;">${c.pin}</div>
+        <div class="cr-info"><div class="cr-name">${c.nombre}</div><div class="cr-esp">${info}</div></div>
+        <div class="cr-pin">${c.pin}</div>
         <div class="cr-actions">
           <button class="cr-btn eye" onclick="verDatosCliente('${c.id}')">Ver</button>
           <button class="cr-btn edit" onclick="abrirCambiarPin('${c.id}')">PIN</button>
@@ -814,24 +804,28 @@ async function renderClientesAsync(){
       </div>`;
     }
   }
+
   if(desactivos.length>0){
-    html+=`<div class="section-lbl" style="margin-top:20px;">Clientes desactivados (${desactivos.length})</div>`;
+    html+=`<div class="section-lbl" style="margin-top:16px;">Desactivados (${desactivos.length})</div>`;
     desactivos.forEach(c=>{
       html+=`<div class="cliente-row" style="opacity:0.5;">
         <div class="cr-av" style="background:${c.bg};color:${c.fg};">${c.ini}</div>
-        <div class="cr-info"><div class="cr-name">${c.nombre}</div><div class="cr-esp">${c.esp} · acceso desactivado</div></div>
+        <div class="cr-info"><div class="cr-name">${c.nombre}</div><div class="cr-esp">${c.esp} · desactivado</div></div>
         <button class="cr-btn edit" onclick="reactivarCliente('${c.id}')">Reactivar</button>
+        <button class="cr-btn del" onclick="borrarClientePermanente('${c.id}','${c.nombre}')">🗑️</button>
       </div>`;
     });
   }
+
   html+=`<div style="margin-top:20px;border-top:1px solid var(--bord);padding-top:16px;">
-    <div class="section-lbl">Tu PIN maestro de agencia</div>
+    <div class="section-lbl">Tu PIN maestro</div>
     <div style="display:flex;align-items:center;gap:8px;">
       <div style="font-family:monospace;font-size:20px;font-weight:700;color:var(--purple);background:var(--pl);border:1px solid var(--pb);border-radius:10px;padding:8px 16px;letter-spacing:4px;flex:1;text-align:center;" id="pm-display">${pinMaestro}</div>
       <button class="cr-btn edit" style="padding:10px 14px;font-size:13px;" onclick="cambiarPinMaestro()">Cambiar</button>
     </div>
-    <div style="font-size:11px;color:var(--t3);margin-top:6px;">Este PIN solo lo conoces tú. Guárdalo bien.</div>
+    <div style="font-size:11px;color:var(--t3);margin-top:6px;">Solo lo conoces tú. Con este PIN siempre puedes entrar.</div>
   </div>`;
+
   document.getElementById('content').innerHTML=html;
 }
 
@@ -840,20 +834,21 @@ async function renderReportesAsync(){
   const kh=hoy();
   let html=`<div class="section-lbl">Reporte del día — ${new Date().toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'})}</div>`;
   let txt=`📊 REPORTE AGENCIA — ${new Date().toLocaleDateString('es-MX')}\n${'─'.repeat(40)}\n`;
+
   for(const c of clientesDB.filter(x=>x.activo)){
     try{
-      const rp=await window.storage.get('itc-pac-'+c.id,true);
-      const rr=await window.storage.get('itc-rep-'+c.id,true);
-      const ps=rp?JSON.parse(rp.value):[];
-      const rep=rr?JSON.parse(rr.value):{};
+      const rp=await dbGet('pac-'+c.id);
+      const rr=await dbGet('rep-'+c.id);
+      const ps=rp?JSON.parse(rp):[];
+      const rep=rr?JSON.parse(rr):{};
       const rd=rep[kh]||{mensajes:0,agendados:0,consultas:0,cancelados:0,noperfilados:0};
       const sw=semanaKey();
       const semana=ps.filter(p=>p.ts&&new Date(p.ts).toISOString().slice(0,10)>=sw).length;
       html+=`<div style="background:white;border:1px solid var(--bord);border-radius:var(--r);padding:12px 14px;margin-bottom:10px;">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
           <div class="cr-av" style="background:${c.bg};color:${c.fg};width:32px;height:32px;font-size:11px;">${c.ini}</div>
-          <div style="font-weight:700;font-size:13px;">${c.nombre}</div>
-          <div style="margin-left:auto;font-size:11px;color:var(--t3);">${semana} nuevos/sem</div>
+          <div style="font-weight:700;font-size:13px;flex:1;">${c.nombre}</div>
+          <div style="font-size:11px;color:var(--t3);">${semana} nuevos/sem</div>
         </div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:11px;text-align:center;">
           <div><div style="font-size:18px;font-weight:700;color:var(--blue);">${rd.mensajes}</div><div style="color:var(--t3);">mensajes</div></div>
@@ -867,13 +862,23 @@ async function renderReportesAsync(){
       txt+=`\n${c.nombre}: mensajes ${rd.mensajes} · agendados ${rd.agendados} · consultas ${rd.consultas} · cancelados ${rd.cancelados} · nuevos/sem ${semana}\n`;
     }catch{}
   }
+
+  if(clientesDB.filter(x=>x.activo).length===0){
+    html+='<div class="empty"><div class="empty-ico">📊</div><div class="empty-txt">Sin clientes activos aún.</div></div>';
+  }
+
   txt+=`\n${'─'.repeat(40)}\nImpulsoTuConsulta`;
-  html+=`<button class="btn-full" style="background:var(--green);color:white;border:none;margin-top:8px;" onclick="navigator.clipboard&&navigator.clipboard.writeText(${JSON.stringify(txt)}).then(()=>showToast('Reporte copiado ✓'))">📋 Copiar reporte completo</button>`;
+  html+=`<button class="btn-full" style="background:var(--green);color:white;border:none;margin-top:8px;" onclick="copiarTexto(${JSON.stringify(txt)})">📋 Copiar reporte completo</button>`;
   document.getElementById('content').innerHTML=html;
 }
 
+function copiarTexto(txt){
+  if(navigator.clipboard) navigator.clipboard.writeText(txt);
+  showToast('Reporte copiado ✓');
+}
+
 // ══════════════════════════════════════════
-// NUEVO CLIENTE
+// GESTIÓN DE CLIENTES
 // ══════════════════════════════════════════
 function abrirNuevoCliente(){
   clienteEditandoId=null;
@@ -881,7 +886,7 @@ function abrirNuevoCliente(){
   document.getElementById('nc-btn-guardar').textContent='Agregar cliente';
   ['nc-nombre','nc-esp','nc-ini','nc-pin','nc-camps'].forEach(id=>document.getElementById(id).value='');
   colorSelBg='#fdf0ee'; colorSelFg='#8b2020';
-  document.querySelectorAll('.color-opt').forEach(el=>el.style.outline='none');
+  document.querySelectorAll('.color-opt').forEach(el=>el.classList.remove('sel'));
   abrirSheet('sheet-nuevo-cliente');
 }
 
@@ -901,11 +906,9 @@ function editarCliente(id){
 }
 
 function selColor(el){
-  colorSelBg=el.dataset.bg;
-  colorSelFg=el.dataset.fg;
-  document.querySelectorAll('.color-opt').forEach(e=>e.style.outline='none');
-  el.style.outline=`3px solid ${colorSelFg}`;
-  el.style.outlineOffset='2px';
+  colorSelBg=el.dataset.bg; colorSelFg=el.dataset.fg;
+  document.querySelectorAll('.color-opt').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
 }
 
 async function guardarNuevoCliente(){
@@ -920,23 +923,20 @@ async function guardarNuevoCliente(){
 
   if(clienteEditandoId){
     const idx=clientesDB.findIndex(x=>x.id===clienteEditandoId);
-    if(idx>=0){
-      clientesDB[idx]={...clientesDB[idx],nombre,esp,ini,pin,campanias,bg:colorSelBg,fg:colorSelFg};
-    }
+    if(idx>=0) clientesDB[idx]={...clientesDB[idx],nombre,esp,ini,pin,campanias,bg:colorSelBg,fg:colorSelFg};
     showToast(`${nombre} actualizado ✓`);
   } else {
-    // Verificar PIN único
     if(clientesDB.find(x=>x.pin===pin)){ showToast('Ese PIN ya está en uso. Elige otro.',true); return; }
-    const nuevoCliente={id:genId(),nombre,esp,ini,pin,bg:colorSelBg,fg:colorSelFg,activo:true,campanias};
-    clientesDB.push(nuevoCliente);
-    showToast(`${nombre} agregado ✓ · PIN: ${pin}`);
+    clientesDB.push({id:genId(),nombre,esp,ini,pin,bg:colorSelBg,fg:colorSelFg,activo:true,campanias});
+    showToast(`✓ ${nombre} agregado · PIN: ${pin}`);
   }
+
   await guardarClientesDB();
   cerrarSheets();
   renderClientesAsync();
+  renderLogin();
 }
 
-// ── CAMBIAR PIN ───────────────────────────
 function abrirCambiarPin(clienteId){
   const c=clientesDB.find(x=>x.id===clienteId);
   if(!c) return;
@@ -951,15 +951,16 @@ function abrirCambiarPin(clienteId){
 async function confirmarCambioPin(){
   const nuevo=document.getElementById('cp-nuevo-pin').value.trim();
   if(!nuevo||nuevo.length<4){ showToast('Mínimo 4 dígitos',true); return; }
-  if(nuevo===pinMaestro){ showToast('Ese PIN es el tuyo. Usa otro.',true); return; }
-  if(clientesDB.find(x=>x.pin===nuevo&&x.id!==clientePinSelId)){ showToast('PIN ya en uso. Elige otro.',true); return; }
+  if(nuevo===pinMaestro){ showToast('Ese PIN es el tuyo.',true); return; }
+  if(clientesDB.find(x=>x.pin===nuevo&&x.id!==clientePinSelId)){ showToast('PIN ya en uso.',true); return; }
   const c=clientesDB.find(x=>x.id===clientePinSelId);
   if(!c) return;
   c.pin=nuevo;
   await guardarClientesDB();
   cerrarSheet('sheet-cambiar-pin');
-  showToast(`PIN de ${c.nombre} cambiado a ${nuevo} ✓`);
+  showToast(`PIN de ${c.nombre} cambiado ✓`);
   renderClientesAsync();
+  renderLogin();
 }
 
 async function desactivarCliente(){
@@ -968,21 +969,9 @@ async function desactivarCliente(){
   c.activo=false;
   await guardarClientesDB();
   cerrarSheet('sheet-cambiar-pin');
-  showToast(`${c.nombre} desactivado. No puede entrar.`);
+  showToast(`${c.nombre} desactivado`);
   renderClientesAsync();
-}
-
-async function borrarClientePermanente(id, nombre){
-  if(!confirm(`¿Borrar permanentemente a ${nombre}? Esta acción no se puede deshacer. Se eliminarán todos sus datos.`)) return;
-  clientesDB = clientesDB.filter(x => x.id !== id);
-  await guardarClientesDB();
-  // Borrar también sus pacientes y reportes
-  try{
-    await window.storage.delete('itc-pac-'+id, true);
-    await window.storage.delete('itc-rep-'+id, true);
-  }catch(e){}
-  showToast(`${nombre} eliminado permanentemente`);
-  renderClientesAsync();
+  renderLogin();
 }
 
 async function reactivarCliente(id){
@@ -992,14 +981,26 @@ async function reactivarCliente(id){
   await guardarClientesDB();
   showToast(`${c.nombre} reactivado ✓`);
   renderClientesAsync();
+  renderLogin();
+}
+
+async function borrarClientePermanente(id,nombre){
+  if(!confirm(`¿Borrar permanentemente a ${nombre}?\n\nEsta acción no se puede deshacer.`)) return;
+  clientesDB=clientesDB.filter(x=>x.id!==id);
+  await guardarClientesDB();
+  await dbDel('pac-'+id);
+  await dbDel('rep-'+id);
+  showToast(`${nombre} eliminado permanentemente`);
+  renderClientesAsync();
+  renderLogin();
 }
 
 async function cambiarPinMaestro(){
-  const nuevo=prompt('Ingresa tu nuevo PIN maestro (mínimo 4 dígitos):');
+  const nuevo=prompt('Nuevo PIN maestro (mínimo 4 dígitos):');
   if(!nuevo||nuevo.length<4){ showToast('PIN muy corto',true); return; }
   if(clientesDB.find(x=>x.pin===nuevo)){ showToast('Ese PIN ya lo usa un cliente.',true); return; }
   pinMaestro=nuevo;
-  try{ await window.storage.set('itc-pin-maestro',nuevo,true); }catch(e){}
+  await dbSet('pin-maestro',nuevo);
   const el=document.getElementById('pm-display');
   if(el) el.textContent=nuevo;
   showToast('PIN maestro actualizado ✓');
@@ -1011,7 +1012,7 @@ function verDatosCliente(id){
 }
 
 // ══════════════════════════════════════════
-// NUEVO PACIENTE
+// PACIENTES
 // ══════════════════════════════════════════
 function abrirNuevoPaciente(){
   estadoSelNuevo='nuevo';
@@ -1030,14 +1031,10 @@ function renderEstadoBtnsNuevo(sel){
 function selEstadoNuevo(v){ renderEstadoBtnsNuevo(v); }
 
 function renderQuickTags(){
-  const camps=(clienteActual.campanias||[]);
+  const camps=clienteActual.campanias||[];
   document.getElementById('quick-tags-nuevo').innerHTML=camps.map(t=>
-    `<button class="quick-tag" onclick="selQuickTag('${t.replace(/'/g,"\\'")}')">+ ${t}</button>`
+    `<button class="quick-tag" onclick="document.getElementById('f-trat').value='${t.replace(/'/g,"\\'")}'">${t}</button>`
   ).join('');
-}
-function selQuickTag(t){
-  const el=document.getElementById('f-trat');
-  if(el) el.value=t;
 }
 
 async function guardarPaciente(){
@@ -1059,9 +1056,6 @@ async function guardarPaciente(){
   showToast('Paciente registrado ✓');
 }
 
-// ══════════════════════════════════════════
-// DETALLE PACIENTE
-// ══════════════════════════════════════════
 function abrirDetalle(id){
   const p=pacientes.find(x=>String(x.id)===String(id));
   if(!p) return;
@@ -1085,6 +1079,7 @@ function renderEstadoBtnsDet(sel){
   document.getElementById('estado-btns-det').innerHTML=ESTADOS.map(e=>
     `<button class="est-btn ${sel===e.v?'sel-'+e.v:''}" onclick="selEstadoDet('${e.v}')">${e.lbl}</button>`).join('');
 }
+
 function selEstadoDet(v){
   estadoSelDet=v;
   renderEstadoBtnsDet(v);
@@ -1119,7 +1114,7 @@ async function eliminarPaciente(){
 function abrirWA(){
   const p=pacientes.find(x=>String(x.id)===String(pacSelId));
   if(!p||!p.tel) return;
-  const msg=`Hola ${p.nombre} 👋\n\nTe recordamos que tienes una cita con ${clienteActual.nombre} (${clienteActual.esp})${p.tratamiento?' sobre '+p.tratamiento:''} el *${fmtF(p.fecha)}*.\n\nPor favor confirma tu asistencia respondiendo este mensaje. ¡Te esperamos! 😊`;
+  const msg=`Hola ${p.nombre} 👋\n\nTe recordamos que tienes una cita con ${clienteActual.nombre} (${clienteActual.esp})${p.tratamiento?' sobre '+p.tratamiento:''} el *${fmtF(p.fecha)}*.\n\nPor favor confirma tu asistencia. ¡Te esperamos! 😊`;
   const tel=p.tel.replace(/\D/g,'');
   window.open(`https://wa.me/52${tel}?text=${encodeURIComponent(msg)}`,'_blank');
 }
@@ -1138,7 +1133,7 @@ function abrirGCal(){
 }
 
 // ══════════════════════════════════════════
-// SHEETS UTILS
+// UTILS
 // ══════════════════════════════════════════
 function abrirSheet(id){
   document.getElementById('overlay').classList.add('open');
@@ -1161,9 +1156,26 @@ function showToast(msg,err=false){
 }
 
 // ══════════════════════════════════════════
-// INIT
+// INIT — esperar Firebase
 // ══════════════════════════════════════════
-cargarClientesDB().then(()=>renderLogin());
+async function iniciar(){
+  await cargarClientesDB();
+  renderLogin();
+}
+
+if(window.firebaseReady){
+  iniciar();
+} else {
+  document.addEventListener('firebase-ready', iniciar);
+  // Timeout de seguridad
+  setTimeout(()=>{
+    if(!clientesDB.length){
+      document.getElementById('loading-screen').style.display='none';
+      document.getElementById('login-screen').style.display='flex';
+      document.getElementById('login-clients').innerHTML='<div class="alert red"><strong>Error de conexión.</strong> Verifica tu internet e intenta de nuevo.</div>';
+    }
+  }, 8000);
+}
 </script>
 </body>
 </html>
