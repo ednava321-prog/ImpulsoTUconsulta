@@ -452,11 +452,16 @@ function genId(){return 'c'+Date.now().toString(36)+Math.random().toString(36).s
 async function cargarClientesDB(){
   try{
     const r=await window.storage.get('itc-clientes-db',true);
-    if(r){ clientesDB=JSON.parse(r.value); }
-    else{ clientesDB=getClientesDefault(); await guardarClientesDB(); }
+    if(r){
+      clientesDB=JSON.parse(r.value);
+    } else {
+      // Primera vez — inicializar con lista vacía, sin clientes default
+      clientesDB=[];
+      await guardarClientesDB();
+    }
     const rp=await window.storage.get('itc-pin-maestro',true);
     if(rp) pinMaestro=rp.value;
-  }catch{ if(!clientesDB.length) clientesDB=getClientesDefault(); }
+  }catch{ if(!clientesDB.length) clientesDB=[]; }
 }
 
 async function guardarClientesDB(){
