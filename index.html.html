@@ -799,9 +799,12 @@ async function renderClientesAsync(){
       html+=`<div class="cliente-row">
         <div class="cr-av" style="background:${c.bg};color:${c.fg};">${c.ini}</div>
         <div class="cr-info"><div class="cr-name">${c.nombre}</div><div class="cr-esp">${c.esp}</div></div>
-        <div class="cr-pin">${c.pin}</div>
+        <div style="font-family:monospace;font-size:13px;font-weight:700;color:var(--green);background:var(--gl);border:1px solid var(--gb);border-radius:8px;padding:3px 8px;letter-spacing:2px;">${c.pin}</div>
         <div class="cr-actions">
+          <button class="cr-btn eye" onclick="verDatosCliente('${c.id}')">Ver</button>
           <button class="cr-btn edit" onclick="abrirCambiarPin('${c.id}')">PIN</button>
+          <button class="cr-btn edit" onclick="editarCliente('${c.id}')">✏️</button>
+          <button class="cr-btn del" onclick="borrarClientePermanente('${c.id}','${c.nombre}')">🗑️</button>
         </div>
       </div>`;
     }
