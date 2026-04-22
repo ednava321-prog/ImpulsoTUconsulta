@@ -330,7 +330,38 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <input class="fi" id="pin-input" type="password" inputmode="numeric" placeholder="PIN de acceso" maxlength="8" style="margin-bottom:4px;" onkeydown="if(event.key==='Enter')loginConPin()">
     <div id="pin-hint" style="font-size:11px;color:var(--t3);text-align:center;margin-bottom:8px;">Toca tu nombre y escribe tu PIN</div>
     <button class="btn-login" onclick="loginConPin()">Entrar al CRM →</button>
-    <div style="text-align:center;margin-top:12px;"><a onclick="volverDirectorio()" style="font-size:12px;color:var(--t3);cursor:pointer;">← Volver al directorio</a></div>
+    <div style="text-align:center;margin-top:10px;">
+      <a onclick="mostrarRecuperarPin()" style="font-size:12px;color:var(--gm);cursor:pointer;text-decoration:underline;">¿Olvidaste tu PIN?</a>
+    </div>
+    <div style="text-align:center;margin-top:8px;"><a onclick="volverDirectorio()" style="font-size:12px;color:var(--t3);cursor:pointer;">← Volver al directorio</a></div>
+  </div>
+</div>
+
+<!-- MODAL: RECUPERAR PIN -->
+<div id="modal-recuperar" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:800;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:white;border-radius:20px;width:100%;max-width:360px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+    <div style="background:var(--green);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:15px;font-weight:700;color:white;">🔑 Recuperar PIN</div>
+      <button onclick="cerrarRecuperarPin()" style="background:none;border:none;color:white;font-size:22px;cursor:pointer;line-height:1;">✕</button>
+    </div>
+    <div style="padding:20px;">
+      <div id="recuperar-paso1">
+        <div style="font-size:13px;color:var(--t2);margin-bottom:14px;line-height:1.5;">Escribe el correo de la agencia para verificar tu identidad.</div>
+        <input class="fi" id="recuperar-email" type="email" placeholder="correo@ejemplo.com" style="margin-bottom:10px;">
+        <button class="btn-login" onclick="verificarCorreoRecuperacion()">Verificar correo →</button>
+      </div>
+      <div id="recuperar-paso2" style="display:none;text-align:center;">
+        <div style="font-size:40px;margin-bottom:8px;">✅</div>
+        <div style="font-size:13px;color:var(--t2);margin-bottom:14px;">Correo verificado. Tu PIN maestro es:</div>
+        <div id="recuperar-pin-display" style="font-family:monospace;font-size:32px;font-weight:900;color:var(--green);background:var(--gl);border:2px solid var(--gb);border-radius:14px;padding:14px;letter-spacing:6px;margin-bottom:16px;"></div>
+        <button class="btn-login" onclick="cerrarRecuperarPin()">Entendido →</button>
+      </div>
+      <div id="recuperar-error" style="display:none;text-align:center;">
+        <div style="font-size:36px;margin-bottom:8px;">❌</div>
+        <div style="font-size:13px;color:var(--red);margin-bottom:14px;line-height:1.5;">Correo no reconocido. Solo el correo de la agencia puede recuperar el PIN maestro.</div>
+        <button class="btn-login" style="background:var(--red);" onclick="cerrarRecuperarPin()">Cerrar</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -441,6 +472,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="color-opt" data-bg="#e8f4ec" data-fg="#1a4a2e" style="background:#e8f4ec;border:2px solid #b8d8c4;" onclick="selColor(this)"></div>
       </div>
     </div>
+    <div class="fg"><label class="fl">Correo del cliente (para recuperar PIN)</label><input class="fi" id="nc-email" type="email" placeholder="doctor@correo.com"></div>
     <div class="fg"><label class="fl">Campañas activas (una por línea)</label><textarea class="fi" id="nc-camps" rows="3" placeholder="Ej: Problemas del desarrollo&#10;Control niño sano"></textarea></div>
   </div>
   <div class="sheet-foot">
@@ -618,6 +650,7 @@ window.firebaseReady=true;document.dispatchEvent(new Event('firebase-ready'));
 // CONFIG
 // ══════════════════════════════════════════
 const PIN_MAESTRO_DEFAULT='9999';
+const AGENCIA_EMAIL='ednava321@gmail.com';
 const GCAL_CLIENT_ID='598396830297-74qvaqri5tb841bgel92t509psqr91pe.apps.googleusercontent.com';
 const GCAL_SCOPE='https://www.googleapis.com/auth/calendar.events';
 
@@ -959,6 +992,36 @@ function selCRMCliente(id,el){
   el.classList.add('sel');
   document.getElementById('pin-hint').textContent='Escribe tu PIN y toca Entrar';
   document.getElementById('pin-input').focus();
+}
+
+function mostrarRecuperarPin(){
+  document.getElementById('modal-recuperar').style.display='flex';
+  document.getElementById('recuperar-paso1').style.display='block';
+  document.getElementById('recuperar-paso2').style.display='none';
+  document.getElementById('recuperar-error').style.display='none';
+  document.getElementById('recuperar-email').value='';
+  setTimeout(()=>document.getElementById('recuperar-email').focus(),200);
+}
+function cerrarRecuperarPin(){
+  document.getElementById('modal-recuperar').style.display='none';
+}
+function verificarCorreoRecuperacion(){
+  const email=document.getElementById('recuperar-email').value.trim().toLowerCase();
+  document.getElementById('recuperar-paso1').style.display='none';
+  // Verificar correo de agencia
+  if(email===AGENCIA_EMAIL.toLowerCase()){
+    document.getElementById('recuperar-pin-display').textContent=pinMaestro;
+    document.getElementById('recuperar-paso2').style.display='block';
+    return;
+  }
+  // Verificar correo de cliente registrado
+  const cliente=clientesDB.find(c=>c.email&&c.email.toLowerCase()===email&&c.activo);
+  if(cliente){
+    document.getElementById('recuperar-pin-display').textContent=cliente.pin;
+    document.getElementById('recuperar-paso2').style.display='block';
+    return;
+  }
+  document.getElementById('recuperar-error').style.display='block';
 }
 
 function loginConPin(){
@@ -1446,7 +1509,7 @@ function abrirNuevoCliente(){
   clienteEditandoId=null;
   document.getElementById('sc-titulo').textContent='Agregar cliente';
   document.getElementById('nc-btn-guardar').textContent='Agregar';
-  ['nc-nombre','nc-esp','nc-ini','nc-pin','nc-camps'].forEach(id=>document.getElementById(id).value='');
+  ['nc-nombre','nc-esp','nc-ini','nc-pin','nc-camps','nc-email'].forEach(id=>document.getElementById(id).value='');
   colorSelBg='#fdf0ee';colorSelFg='#8b2020';
   document.querySelectorAll('.color-opt').forEach(el=>el.classList.remove('sel'));
   abrirSheet('sheet-cliente');
@@ -1461,6 +1524,7 @@ function abrirEditarCliente(id){
   document.getElementById('nc-esp').value=c.esp;
   document.getElementById('nc-ini').value=c.ini;
   document.getElementById('nc-pin').value=c.pin;
+  document.getElementById('nc-email').value=c.email||'';
   document.getElementById('nc-camps').value=(c.campanias||[]).join('\n');
   colorSelBg=c.bg;colorSelFg=c.fg;
   abrirSheet('sheet-cliente');
@@ -1473,17 +1537,18 @@ async function guardarCliente(){
   const esp=document.getElementById('nc-esp').value.trim();
   const ini=(document.getElementById('nc-ini').value.trim().toUpperCase())||nombre.slice(0,2).toUpperCase();
   const pin=document.getElementById('nc-pin').value.trim();
+  const email=document.getElementById('nc-email').value.trim().toLowerCase();
   const camps=document.getElementById('nc-camps').value.trim();
   if(!nombre||!esp||!pin){showToast('Nombre, especialidad y PIN son obligatorios',true);return;}
   if(pin===pinMaestro){showToast('Ese PIN es el tuyo.',true);return;}
   const campanias=camps?camps.split('\n').map(s=>s.trim()).filter(Boolean):[];
   if(clienteEditandoId){
     const idx=clientesDB.findIndex(x=>x.id===clienteEditandoId);
-    if(idx>=0)clientesDB[idx]={...clientesDB[idx],nombre,esp,ini,pin,campanias,bg:colorSelBg,fg:colorSelFg};
+    if(idx>=0)clientesDB[idx]={...clientesDB[idx],nombre,esp,ini,pin,email,campanias,bg:colorSelBg,fg:colorSelFg};
     showToast(`${nombre} actualizado ✓`);
   }else{
     if(clientesDB.find(x=>x.pin===pin)){showToast('PIN ya en uso.',true);return;}
-    clientesDB.push({id:genId(),nombre,esp,ini,pin,bg:colorSelBg,fg:colorSelFg,activo:true,campanias,perfil:{visible:false,estrellas:5}});
+    clientesDB.push({id:genId(),nombre,esp,ini,pin,email,bg:colorSelBg,fg:colorSelFg,activo:true,campanias,perfil:{visible:false,estrellas:5}});
     showToast(`✓ ${nombre} agregado · PIN: ${pin}`);
   }
   await guardarClientesDB();
