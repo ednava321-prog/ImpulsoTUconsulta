@@ -337,6 +337,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 </div>
 
+<!-- LIGHTBOX FOTOS -->
+<div id="lightbox" onclick="cerrarLightbox()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:900;align-items:center;justify-content:center;padding:16px;">
+  <button onclick="cerrarLightbox()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:white;font-size:24px;width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+  <img id="lightbox-img" src="" style="max-width:100%;max-height:90vh;border-radius:12px;object-fit:contain;" onclick="event.stopPropagation()">
+</div>
+
 <!-- MODAL: RECUPERAR PIN -->
 <div id="modal-recuperar" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:800;align-items:center;justify-content:center;padding:20px;">
   <div style="background:white;border-radius:20px;width:100%;max-width:360px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
@@ -815,7 +821,7 @@ async function renderPerfilDoctor(c,irAgendar=false){
 
       ${fotos.length?`<div class="info-card"><h3>📸 Galería del consultorio</h3>
         <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:4px;">
-          ${fotos.map(f=>`<img src="${f}" style="width:100%;height:140px;object-fit:cover;border-radius:10px;cursor:pointer;" onclick="window.open('${f}','_blank')" onerror="this.parentElement.style.display='none'">`).join('')}
+          ${fotos.map(f=>`<img src="${f}" style="width:100%;height:140px;object-fit:cover;border-radius:10px;cursor:pointer;" onclick="abrirLightbox('${f}')" onerror="this.parentElement.style.display='none'">`).join('')}
         </div></div>`:''}
 
       ${enfermedades.length?`<div class="info-card"><h3>🩺 Enfermedades y padecimientos que trata</h3>
@@ -833,9 +839,12 @@ async function renderPerfilDoctor(c,irAgendar=false){
         <h3 style="color:var(--blue);">📹 Consulta por videollamada</h3>
         <p style="font-size:13px;color:var(--t2);margin-bottom:12px;">Consulta desde la comodidad de tu hogar. Disponible por videollamada en línea.</p>
         ${p.videollamadaInfo?`<p style="font-size:13px;color:var(--t2);margin-bottom:12px;">${p.videollamadaInfo}</p>`:''}
-        <a href="${p.videollamadaLink||'#'}" target="_blank" style="display:block;width:100%;padding:13px;border-radius:12px;background:var(--blue);color:white;font-size:14px;font-weight:700;text-align:center;text-decoration:none;margin-bottom:8px;">
-          📹 Agendar consulta virtual
-        </a>
+        ${p.videollamadaLink
+          ? `<a href="${p.videollamadaLink}" target="_blank" style="display:block;width:100%;padding:13px;border-radius:12px;background:var(--blue);color:white;font-size:14px;font-weight:700;text-align:center;text-decoration:none;margin-bottom:8px;">📹 Agendar consulta virtual</a>`
+          : p.whatsapp
+            ? `<a href="https://wa.me/${p.whatsapp}?text=${encodeURIComponent('Hola, me interesa una consulta por videollamada con '+c.nombre)}" target="_blank" style="display:block;width:100%;padding:13px;border-radius:12px;background:var(--blue);color:white;font-size:14px;font-weight:700;text-align:center;text-decoration:none;margin-bottom:8px;">📹 Solicitar videollamada por WhatsApp</a>`
+            : `<div style="background:white;border:1px solid var(--bb);border-radius:10px;padding:12px;text-align:center;font-size:13px;color:var(--blue);margin-bottom:8px;">Contacta al consultorio para agendar videollamada</div>`
+        }
         ${p.whatsapp?`<a href="https://wa.me/${p.whatsapp}?text=${encodeURIComponent('Hola, me interesa una consulta por videollamada con '+c.nombre)}" target="_blank" style="display:block;width:100%;padding:11px;border-radius:12px;background:white;color:var(--blue);border:1.5px solid var(--bb);font-size:13px;font-weight:600;text-align:center;text-decoration:none;">
           💬 Preguntar por WhatsApp
         </a>`:''}
@@ -1901,7 +1910,7 @@ function renderQuickTags(){
   if(el) el.innerHTML=(clienteActual.campanias||[]).map(t=>`<button style="padding:5px 10px;border-radius:8px;border:1.5px solid var(--bord);background:white;font-size:11px;cursor:pointer;color:var(--t2);" onclick="document.getElementById('f-trat').value='${t.replace(/'/g,"\\'")}'">+ ${t}</button>`).join('');
 }
 
-async function guardarPaciente(){
+async function guardarPaciente(silencioso=false){
   const nom=document.getElementById('f-nom').value.trim();
   if(!nom){showToast('El nombre es obligatorio',true);return;}
   if(modoEdicion){
@@ -1911,12 +1920,14 @@ async function guardarPaciente(){
     p.fecha=document.getElementById('f-fecha').value;
     p.notas=document.getElementById('f-notas').value.trim();
     p.estado=estadoSel;
-    cerrarSheets();renderCRM();await guardarPacientes();showToast('Cambios guardados ✓');
+    if(!silencioso){cerrarSheets();renderCRM();}
+    await guardarPacientes();
+    if(!silencioso)showToast('Cambios guardados ✓');
   }else{
     const p={id:String(nextId++),nombre:nom,tel:document.getElementById('f-tel').value.trim(),estado:estadoSel,tratamiento:document.getElementById('f-trat').value.trim(),fecha:document.getElementById('f-fecha').value,notas:document.getElementById('f-notas').value.trim(),ts:Date.now()};
-    pacientes.push(p);cerrarSheets();renderCRM();await guardarPacientes();
-    if(p.fecha){pacSelId=p.id;await agregarCitaGCalSilencioso(p);}
-    showToast('Paciente registrado ✓');
+    pacientes.push(p);pacSelId=p.id;modoEdicion=true;
+    if(!silencioso){cerrarSheets();renderCRM();await guardarPacientes();if(p.fecha)await agregarCitaGCalSilencioso(p);showToast('Paciente registrado ✓');}
+    else{await guardarPacientes();}
   }
 }
 
@@ -2036,10 +2047,35 @@ async function agregarCitaGCalSilencioso(p){
 }
 
 async function agregarCitaGCal(){
+  // Si es paciente nuevo (no guardado aún), guardar primero
+  if(!pacSelId||!modoEdicion){
+    const fechaVal=document.getElementById('f-fecha').value;
+    if(!fechaVal){showToast('Agrega la fecha de la cita primero',true);return;}
+    await guardarPaciente(true); // guardar silencioso
+    // Esperar a que pacSelId se asigne
+    await new Promise(r=>setTimeout(r,400));
+  }
   const p=pacientes.find(x=>String(x.id)===String(pacSelId));
-  if(!p?.fecha){showToast('Agrega la fecha de la cita primero',true);return;}
+  if(!p){showToast('Guarda el paciente primero',true);return;}
+  if(!p.fecha){showToast('Agrega la fecha de la cita primero',true);return;}
   if(!gcalToken&&tokenClient){tokenClient.requestAccessToken();return;}
+  if(!gcalToken){abrirGCalURL(p);return;}
   await agregarCitaGCalSilencioso(p);
+}
+
+// ══════════════════════════════════════════
+// LIGHTBOX
+// ══════════════════════════════════════════
+function abrirLightbox(src){
+  const lb=document.getElementById('lightbox');
+  document.getElementById('lightbox-img').src=src;
+  lb.style.display='flex';
+  document.body.style.overflow='hidden';
+}
+function cerrarLightbox(){
+  document.getElementById('lightbox').style.display='none';
+  document.getElementById('lightbox-img').src='';
+  document.body.style.overflow='';
 }
 
 // ══════════════════════════════════════════
