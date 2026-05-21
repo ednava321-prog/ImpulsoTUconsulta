@@ -228,6 +228,27 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .rep-btn.plus{border-color:var(--gb);color:var(--green);}
 .rep-btn.minus{border-color:var(--rb);color:var(--red);}
 
+/* ── NUEVO: SERVICIOS DE SALUD ── */
+.servicio-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:20px;background:var(--gl);border:1.5px solid var(--gb);color:var(--green);font-size:12px;font-weight:600;cursor:pointer;transition:all 0.15s;}
+.servicio-chip.sel{background:var(--green);color:white;border-color:var(--green);}
+.servicio-chip:hover:not(.sel){background:var(--gb);}
+.servicios-grid{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px;}
+.servicio-tag-small{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:12px;background:var(--gl);border:1px solid var(--gb);color:var(--green);font-size:11px;font-weight:600;}
+
+/* ── NUEVO: HISTORIAL POR DÍA ── */
+.hist-day-card{background:white;border:1px solid var(--bord);border-radius:14px;margin-bottom:10px;overflow:hidden;}
+.hist-day-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;background:var(--bg);}
+.hist-day-header:hover{background:var(--gl);}
+.hist-day-fecha{font-size:13px;font-weight:700;color:var(--t1);}
+.hist-day-resumen{font-size:11px;color:var(--t3);margin-top:2px;}
+.hist-day-pills{display:flex;gap:6px;align-items:center;}
+.hist-pill{font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;}
+.hist-pill.msgs{background:var(--bl);color:var(--blue);}
+.hist-pill.agend{background:var(--gl);color:var(--green);}
+.hist-day-body{padding:12px 14px;border-top:1px solid var(--bord);display:none;}
+.hist-day-body.open{display:block;}
+.hist-servicios{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
+
 /* AGENCIA */
 .cliente-row{background:white;border:1px solid var(--bord);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .cr-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
@@ -364,7 +385,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       </div>
       <div id="recuperar-error" style="display:none;text-align:center;">
         <div style="font-size:36px;margin-bottom:8px;">❌</div>
-        <div style="font-size:13px;color:var(--red);margin-bottom:14px;line-height:1.5;">Correo no reconocido. Solo el correo de la agencia puede recuperar el PIN maestro.</div>
+        <div style="font-size:13px;color:var(--red);margin-bottom:14px;line-height:1.5;">Correo no reconocido.</div>
         <button class="btn-login" style="background:var(--red);" onclick="cerrarRecuperarPin()">Cerrar</button>
       </div>
     </div>
@@ -499,9 +520,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div style="background:var(--bg);border:1px solid var(--bord2);border-radius:12px;padding:12px 14px;margin-bottom:14px;">
       <div style="font-size:12px;font-weight:700;color:var(--t1);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.05em;">🏥 Fotos del consultorio (máx 6)</div>
       <input type="file" id="sp-fotos-file" accept="image/*" multiple style="display:none;" onchange="procesarFotosSeleccionadas(this.files,'consultorio')">
-      <button class="btn-full" style="background:var(--t1);color:white;border:none;margin-bottom:8px;" onclick="abrirSelectorFoto('consultorio')">
-        📷 Agregar fotos del consultorio
-      </button>
+      <button class="btn-full" style="background:var(--t1);color:white;border:none;margin-bottom:8px;" onclick="abrirSelectorFoto('consultorio')">📷 Agregar fotos del consultorio</button>
       <div id="sp-fotos-preview" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px;"></div>
       <div id="sp-fotos-status" style="font-size:12px;color:var(--t3);text-align:center;display:none;"></div>
       <div class="fg" style="margin-bottom:0;">
@@ -524,7 +543,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div style="background:var(--bl);border:1px solid var(--bb);border-radius:12px;padding:12px 14px;margin-bottom:14px;">
       <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;">📍 Ubicación Google Maps</div>
       <div class="fg"><label class="fl">Enlace de Google Maps</label><input class="fi" id="sp-maps-url" placeholder="https://maps.google.com/..."></div>
-      <div style="font-size:11px;color:var(--t3);">En Google Maps busca el consultorio → Compartir → Copiar enlace y pégalo aquí. El mapa aparecerá en el perfil.</div>
+      <div style="font-size:11px;color:var(--t3);">En Google Maps busca el consultorio → Compartir → Copiar enlace y pégalo aquí.</div>
     </div>
     <!-- VIDEOLLAMADA -->
     <div style="background:var(--bl);border:1px solid var(--bb);border-radius:12px;padding:12px 14px;margin-bottom:14px;">
@@ -536,20 +555,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <button id="sp-video-no" onclick="selVideo(false)" style="flex:1;padding:10px;border-radius:10px;border:1.5px solid var(--bord2);background:var(--bg);color:var(--t3);font-weight:600;cursor:pointer;font-size:13px;">Desactivar</button>
         </div>
       </div>
-      <div class="fg"><label class="fl">Enlace de videollamada (Zoom, Google Meet, etc.)</label><input class="fi" id="sp-video-link" placeholder="https://meet.google.com/... o https://zoom.us/..."></div>
+      <div class="fg"><label class="fl">Enlace de videollamada (Zoom, Google Meet, etc.)</label><input class="fi" id="sp-video-link" placeholder="https://meet.google.com/..."></div>
       <div class="fg"><label class="fl">Información adicional (opcional)</label><input class="fi" id="sp-video-info" placeholder="Ej: Disponible lunes a viernes de 9am a 2pm"></div>
     </div>
     <div style="background:linear-gradient(135deg,#f9f0ff,#fff0f9);border:1px solid var(--pb);border-radius:12px;padding:12px 14px;margin-bottom:14px;">
       <div style="font-size:12px;font-weight:700;color:var(--purple);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;">📲 Redes sociales</div>
       <div class="fg"><label class="fl">Instagram (usuario sin @)</label><input class="fi" id="sp-instagram" placeholder="Ej: dra.garcia.pediatra"></div>
       <div class="fg"><label class="fl">Facebook (URL de la página o usuario)</label><input class="fi" id="sp-facebook" placeholder="Ej: facebook.com/dragarciapediatria"></div>
-      <div style="font-size:11px;color:var(--t3);">Los botones aparecen en el perfil público del doctor. Déjalos vacíos si no los quieres mostrar.</div>
     </div>
     <!-- IDENTIDAD -->
     <div style="background:var(--gl);border:1px solid var(--gb);border-radius:12px;padding:12px 14px;margin-bottom:14px;">
       <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;">📋 Identidad del doctor</div>
       <div class="fg"><label class="fl">Título completo</label><input class="fi" id="sp-titulo-doc" placeholder="Ej: Dr. Juan Pérez López"></div>
-      <div class="fg"><label class="fl">Especialidades (separadas por coma)</label><input class="fi" id="sp-especialidades" placeholder="Ej: Cardiología, Medicina Interna, Ecocardiografía"></div>
+      <div class="fg"><label class="fl">Especialidades (separadas por coma)</label><input class="fi" id="sp-especialidades" placeholder="Ej: Cardiología, Medicina Interna"></div>
       <div class="fg"><label class="fl">Bio / presentación</label><textarea class="fi" id="sp-bio" rows="3" placeholder="Médico especialista con 10 años de experiencia en..."></textarea></div>
       <div class="fg"><label class="fl">Dirección / ubicación</label><input class="fi" id="sp-direccion" placeholder="Calle, colonia, Culiacán, Sin."></div>
     </div>
@@ -560,13 +578,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div id="sp-foto-preview" style="width:72px;height:72px;border-radius:50%;background:var(--gl);border:2px solid var(--gb);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;overflow:hidden;">👤</div>
         <div style="flex:1;">
           <input type="file" id="sp-foto-file" accept="image/*" style="display:none;" onchange="procesarFotosSeleccionadas(this.files,'perfil')">
-          <button class="btn-full" style="background:var(--blue);color:white;border:none;margin-bottom:6px;" onclick="abrirSelectorFoto('perfil')">
-            📷 Seleccionar o tomar foto
-          </button>
-          <div style="font-size:11px;color:var(--t3);">Desde tu galería, cámara o computadora. Puedes recortarla y ajustarla.</div>
+          <button class="btn-full" style="background:var(--blue);color:white;border:none;margin-bottom:6px;" onclick="abrirSelectorFoto('perfil')">📷 Seleccionar o tomar foto</button>
         </div>
       </div>
-      <div id="sp-foto-status" style="font-size:12px;color:var(--t3);text-align:center;display:none;"></div>
       <div class="fg" style="margin-top:8px;margin-bottom:0;">
         <label class="fl">O pega una URL de imagen</label>
         <input class="fi" id="sp-foto" placeholder="https://... enlace de la imagen" oninput="actualizarPreviewFoto(this.value)">
@@ -576,17 +590,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div style="background:var(--pl);border:1px solid var(--pb);border-radius:12px;padding:12px 14px;margin-bottom:14px;">
       <div style="font-size:12px;font-weight:700;color:var(--purple);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;">📱 Contacto y WhatsApp</div>
       <div class="fg"><label class="fl">Número WhatsApp (con código de país)</label><input class="fi" id="sp-whatsapp" placeholder="526671234567"></div>
-      <div style="font-size:11px;color:var(--t3);">Este número recibe los comprobantes de anticipo de los pacientes.</div>
     </div>
     <!-- ANTICIPO Y BANCO -->
     <div style="background:var(--al);border:1px solid var(--ab);border-radius:12px;padding:12px 14px;margin-bottom:14px;">
       <div style="font-size:12px;font-weight:700;color:var(--amb);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;">💳 Anticipo y datos bancarios</div>
       <div class="fg"><label class="fl">Monto del anticipo (MXN)</label><input class="fi" id="sp-anticipo" type="number" placeholder="200"></div>
-      <div class="fg"><label class="fl">Banco</label><input class="fi" id="sp-banco-nombre" placeholder="Ej: BBVA, Banamex, Banorte, HSBC..."></div>
+      <div class="fg"><label class="fl">Banco</label><input class="fi" id="sp-banco-nombre" placeholder="Ej: BBVA, Banamex, Banorte..."></div>
       <div class="fg"><label class="fl">Número de tarjeta o cuenta CLABE</label><input class="fi" id="sp-banco-num" placeholder="Ej: 4152 3140 XXXX XXXX"></div>
       <div class="fg"><label class="fl">Titular de la cuenta</label><input class="fi" id="sp-banco-titular" placeholder="Nombre completo del titular"></div>
-      <div class="fg"><label class="fl">Imagen adicional con datos bancarios (URL, opcional)</label><input class="fi" id="sp-banco-img" placeholder="https://... imagen de QR o comprobante"></div>
-      <div style="font-size:11px;color:var(--t3);">Los datos bancarios aparecen en la página cuando el paciente quiere agendar y pagar el anticipo.</div>
+      <div class="fg"><label class="fl">Imagen adicional con datos bancarios (URL, opcional)</label><input class="fi" id="sp-banco-img" placeholder="https://..."></div>
     </div>
     <!-- RANKING -->
     <div style="background:var(--goldl);border:1px solid #f5d88a;border-radius:12px;padding:12px 14px;margin-bottom:14px;">
@@ -600,7 +612,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <span onclick="selStar(4)" class="sp-star" style="font-size:32px;cursor:pointer;color:#ddd;">★</span>
           <span onclick="selStar(5)" class="sp-star" style="font-size:32px;cursor:pointer;color:#ddd;">★</span>
         </div>
-        <div style="font-size:11px;color:var(--t3);margin-top:4px;">Tú controlas las estrellas. A más reseñas puedes subir el ranking.</div>
       </div>
       <div class="fg">
         <label class="fl">Visibilidad en directorio</label>
@@ -661,6 +672,16 @@ const GCAL_CLIENT_ID='598396830297-74qvaqri5tb841bgel92t509psqr91pe.apps.googleu
 const GCAL_SCOPE='https://www.googleapis.com/auth/calendar.events';
 
 // ══════════════════════════════════════════
+// SERVICIOS DE SALUD PREDETERMINADOS (editables)
+// ══════════════════════════════════════════
+const SERVICIOS_DEFAULT = [
+  'Rodilla','Columna lumbar','Hombro','Ciática','Cervical',
+  'Fractura','Cadera','Tobillo','Rehabilitación','Pie y talón',
+  'Mano y muñeca','Neurológico','Parto / Ginecología','Pediatría',
+  'Diabetes','Hipertensión','Cirugía estética','Próstata','Vasectomía'
+];
+
+// ══════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════
 let pinMaestro=PIN_MAESTRO_DEFAULT;
@@ -687,6 +708,8 @@ let docPerfil=null;
 let spVisibilidad=true;
 let spStars=5;
 let perfilClienteId=null;
+// ── NUEVO: servicios seleccionados en reporte ──
+let serviciosSeleccionados=[];
 
 const ESTADOS=[{v:'interesado',lbl:'Interesado'},{v:'agendado',lbl:'Agendado'},{v:'seguimiento',lbl:'Seguimiento'}];
 const PILL={
@@ -700,6 +723,11 @@ function fmtF(s){if(!s)return'Sin cita';try{return new Date(s).toLocaleString('e
 function hoy(){return new Date().toISOString().slice(0,10);}
 function semanaKey(){const d=new Date();const day=d.getDay()||7;d.setDate(d.getDate()-day+1);return d.toISOString().slice(0,10);}
 function genId(){return'c'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);}
+function fmtFecha(str){
+  if(!str)return'—';
+  const d=new Date(str+'T12:00');
+  return d.toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+}
 
 async function dbGet(k){return window.dbGet?window.dbGet(k):null;}
 async function dbSet(k,v){return window.dbSet?window.dbSet(k,v):false;}
@@ -718,9 +746,7 @@ function mostrarDirectorio(){
   renderDirectorio();
 }
 
-function volverDirectorio(){
-  mostrarDirectorio();
-}
+function volverDirectorio(){mostrarDirectorio();}
 
 function mostrarCRMLogin(){
   document.getElementById('directorio').style.display='none';
@@ -731,16 +757,13 @@ function mostrarCRMLogin(){
 
 function renderDirectorio(){
   const activos=clientesDB.filter(c=>c.activo&&c.perfil?.visible!==false);
-  // Filtro especialidades
   const esps=['todos',...new Set(activos.map(c=>c.esp))];
   document.getElementById('esp-filter').innerHTML=esps.map(e=>`
     <div class="esp-pill ${espFiltro===e?'active':''}" onclick="setFiltroEsp('${e}')">${e==='todos'?'Todos':e}</div>`).join('');
-  // Lista
   let lista=activos;
   if(espFiltro!=='todos') lista=lista.filter(c=>c.esp===espFiltro);
   const q=document.getElementById('dir-search-input')?.value?.toLowerCase()||'';
   if(q) lista=lista.filter(c=>c.nombre.toLowerCase().includes(q)||c.esp.toLowerCase().includes(q));
-  // Ordenar por estrellas
   lista.sort((a,b)=>(b.perfil?.estrellas||5)-(a.perfil?.estrellas||5));
   if(!lista.length){
     document.getElementById('doctores-lista').innerHTML='<div class="empty"><div class="empty-ico">👨‍⚕️</div><div class="empty-txt">No se encontraron doctores.</div></div>';
@@ -754,9 +777,6 @@ function renderDocCard(c){
   const stars=p.estrellas||5;
   const starsHTML=[1,2,3,4,5].map(i=>`<span class="star ${i<=stars?'gold':''}">★</span>`).join('');
   const reviews=p.reviews||[];
-  const avatarContent=p.foto
-    ?`<img src="${p.foto}" alt="${c.nombre}" onerror="this.parentElement.innerHTML='${c.ini}'">`
-    :c.ini;
   return `<div class="doc-card" id="doc-${c.id}">
     <div class="doc-card-top">
       <div class="doc-avatar">${p.foto?`<img src="${p.foto}" alt="${c.nombre}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" onerror="this.style.display='none'">`:''}<span style="${p.foto?'display:none':''}">${c.ini}</span></div>
@@ -811,54 +831,16 @@ async function renderPerfilDoctor(c,irAgendar=false){
       <div class="perfil-stars">${starsHTML}<span style="font-size:12px;color:rgba(255,255,255,0.6);margin-left:4px;">${reviews.length} reseñas</span></div>
     </div>
     <div class="perfil-body">
-
       ${(p.instagram||p.facebook)?`<div class="info-card"><h3>📲 Redes sociales</h3><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
-        ${p.instagram?`<a href="https://instagram.com/${p.instagram}" target="_blank" style="flex:1;min-width:120px;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:12px;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:white;font-size:14px;font-weight:700;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>Instagram</a>`:''}
-        ${p.facebook?`<a href="${p.facebook.startsWith('http')?p.facebook:'https://'+p.facebook}" target="_blank" style="flex:1;min-width:120px;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:12px;background:#1877f2;color:white;font-size:14px;font-weight:700;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>Facebook</a>`:''}
+        ${p.instagram?`<a href="https://instagram.com/${p.instagram}" target="_blank" style="flex:1;min-width:120px;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:12px;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:white;font-size:14px;font-weight:700;text-decoration:none;">📷 Instagram</a>`:''}
+        ${p.facebook?`<a href="${p.facebook.startsWith('http')?p.facebook:'https://'+p.facebook}" target="_blank" style="flex:1;min-width:120px;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:12px;background:#1877f2;color:white;font-size:14px;font-weight:700;text-decoration:none;">📘 Facebook</a>`:''}
       </div></div>`:''}
-
       ${p.bio?`<div class="info-card"><h3>👨‍⚕️ Acerca del doctor</h3><p style="font-size:14px;color:var(--t2);line-height:1.7;">${p.bio}</p></div>`:''}
-
-      ${fotos.length?`<div class="info-card"><h3>📸 Galería del consultorio</h3>
-        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:4px;">
-          ${fotos.map(f=>`<img src="${f}" style="width:100%;height:140px;object-fit:cover;border-radius:10px;cursor:pointer;" onclick="abrirLightbox('${f}')" onerror="this.parentElement.style.display='none'">`).join('')}
-        </div></div>`:''}
-
-      ${enfermedades.length?`<div class="info-card"><h3>🩺 Enfermedades y padecimientos que trata</h3>
-        <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:8px;">
-          ${enfermedades.map(e=>`<span style="padding:6px 12px;border-radius:20px;background:var(--gl);border:1px solid var(--gb);color:var(--green);font-size:12px;font-weight:600;">${e}</span>`).join('')}
-        </div></div>`:''}
-
-      ${precios.length?`<div class="info-card"><h3>💰 Precios y servicios</h3>
-        ${precios.map(s=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--bord);">
-          <div><div style="font-size:14px;font-weight:600;">${s.servicio}</div>${s.descripcion?`<div style="font-size:12px;color:var(--t3);">${s.descripcion}</div>`:''}</div>
-          <div style="font-size:16px;font-weight:800;color:var(--green);white-space:nowrap;">$${s.precio} MXN</div>
-        </div>`).join('')}</div>`:''}
-
-      ${p.videollamada?`<div class="agendar-card" style="border-color:var(--bb);background:var(--bl);">
-        <h3 style="color:var(--blue);">📹 Consulta por videollamada</h3>
-        <p style="font-size:13px;color:var(--t2);margin-bottom:12px;">Consulta desde la comodidad de tu hogar. Disponible por videollamada en línea.</p>
-        ${p.videollamadaInfo?`<p style="font-size:13px;color:var(--t2);margin-bottom:12px;">${p.videollamadaInfo}</p>`:''}
-        ${p.videollamadaLink
-          ? `<a href="${p.videollamadaLink}" target="_blank" style="display:block;width:100%;padding:13px;border-radius:12px;background:var(--blue);color:white;font-size:14px;font-weight:700;text-align:center;text-decoration:none;margin-bottom:8px;">📹 Agendar consulta virtual</a>`
-          : p.whatsapp
-            ? `<a href="https://wa.me/${p.whatsapp}?text=${encodeURIComponent('Hola, me interesa una consulta por videollamada con '+c.nombre)}" target="_blank" style="display:block;width:100%;padding:13px;border-radius:12px;background:var(--blue);color:white;font-size:14px;font-weight:700;text-align:center;text-decoration:none;margin-bottom:8px;">📹 Solicitar videollamada por WhatsApp</a>`
-            : `<div style="background:white;border:1px solid var(--bb);border-radius:10px;padding:12px;text-align:center;font-size:13px;color:var(--blue);margin-bottom:8px;">Contacta al consultorio para agendar videollamada</div>`
-        }
-        ${p.whatsapp?`<a href="https://wa.me/${p.whatsapp}?text=${encodeURIComponent('Hola, me interesa una consulta por videollamada con '+c.nombre)}" target="_blank" style="display:block;width:100%;padding:11px;border-radius:12px;background:white;color:var(--blue);border:1.5px solid var(--bb);font-size:13px;font-weight:600;text-align:center;text-decoration:none;">
-          💬 Preguntar por WhatsApp
-        </a>`:''}
-      </div>`:''}
-
-      ${p.mapsUrl||p.direccion?`<div class="info-card"><h3>📍 Ubicación</h3>
-        ${p.direccion?`<div style="font-size:14px;color:var(--t2);margin-bottom:10px;display:flex;align-items:center;gap:6px;"><span>📍</span>${p.direccion}</div>`:''}
-        ${p.mapsUrl?`<a href="${p.mapsUrl}" target="_blank" style="display:block;width:100%;padding:12px;border-radius:12px;background:#4285f4;color:white;font-size:14px;font-weight:700;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-          Ver en Google Maps
-        </a>
-        <iframe src="https://maps.google.com/maps?q=${encodeURIComponent(p.direccion||'Culiacán, Sinaloa')}&output=embed" style="width:100%;height:200px;border:none;border-radius:12px;margin-top:8px;" loading="lazy"></iframe>`:''}
-      </div>`:''}
-
+      ${fotos.length?`<div class="info-card"><h3>📸 Galería del consultorio</h3><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:4px;">${fotos.map(f=>`<img src="${f}" style="width:100%;height:140px;object-fit:cover;border-radius:10px;cursor:pointer;" onclick="abrirLightbox('${f}')" onerror="this.parentElement.style.display='none'">`).join('')}</div></div>`:''}
+      ${enfermedades.length?`<div class="info-card"><h3>🩺 Enfermedades y padecimientos que trata</h3><div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:8px;">${enfermedades.map(e=>`<span style="padding:6px 12px;border-radius:20px;background:var(--gl);border:1px solid var(--gb);color:var(--green);font-size:12px;font-weight:600;">${e}</span>`).join('')}</div></div>`:''}
+      ${precios.length?`<div class="info-card"><h3>💰 Precios y servicios</h3>${precios.map(s=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--bord);"><div><div style="font-size:14px;font-weight:600;">${s.servicio}</div>${s.descripcion?`<div style="font-size:12px;color:var(--t3);">${s.descripcion}</div>`:''}</div><div style="font-size:16px;font-weight:800;color:var(--green);white-space:nowrap;">$${s.precio} MXN</div></div>`).join('')}</div>`:''}
+      ${p.videollamada?`<div class="agendar-card" style="border-color:var(--bb);background:var(--bl);"><h3 style="color:var(--blue);">📹 Consulta por videollamada</h3>${p.videollamadaInfo?`<p style="font-size:13px;color:var(--t2);margin-bottom:12px;">${p.videollamadaInfo}</p>`:''}${p.whatsapp?`<a href="https://wa.me/${p.whatsapp}?text=${encodeURIComponent('Hola, me interesa una consulta por videollamada con '+c.nombre)}" target="_blank" style="display:block;width:100%;padding:13px;border-radius:12px;background:var(--blue);color:white;font-size:14px;font-weight:700;text-align:center;text-decoration:none;margin-bottom:8px;">📹 Solicitar videollamada</a>`:''}</div>`:''}
+      ${p.mapsUrl||p.direccion?`<div class="info-card"><h3>📍 Ubicación</h3>${p.direccion?`<div style="font-size:14px;color:var(--t2);margin-bottom:10px;">📍 ${p.direccion}</div>`:''}${p.mapsUrl?`<a href="${p.mapsUrl}" target="_blank" style="display:block;width:100%;padding:12px;border-radius:12px;background:#4285f4;color:white;font-size:14px;font-weight:700;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;">Ver en Google Maps</a>`:''}</div>`:''}
       <div class="agendar-card" id="form-agendar">
         <h3>📅 Agendar consulta presencial</h3>
         <div class="fi-row">
@@ -867,61 +849,24 @@ async function renderPerfilDoctor(c,irAgendar=false){
         </div>
         <div class="fg"><label class="fl">Motivo de consulta *</label><input class="fi" id="ag-motivo" placeholder="¿Por qué motivo solicitas consulta?"></div>
         <div class="fg"><label class="fl">Fecha y hora *</label><input class="fi" id="ag-fecha" type="datetime-local" min="${new Date().toISOString().slice(0,16)}"></div>
-        <div style="background:var(--al);border:1px solid var(--ab);border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:13px;color:var(--amb);">
-          💡 Se requiere anticipo de <strong>$${p.anticipo||200} MXN</strong> para confirmar tu cita.
-        </div>
+        <div style="background:var(--al);border:1px solid var(--ab);border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:13px;color:var(--amb);">💡 Se requiere anticipo de <strong>$${p.anticipo||200} MXN</strong> para confirmar tu cita.</div>
         <button class="btn-agendar" onclick="enviarSolicitudCita('${c.id}')">Solicitar cita</button>
       </div>
-
       <div id="anticipo-section" style="display:none;">
         <div class="agendar-card">
           <h3>💳 Realizar anticipo</h3>
           <p style="font-size:13px;color:var(--t2);margin-bottom:14px;">Deposita <strong style="color:var(--green);">$${p.anticipo||200} MXN</strong> para confirmar tu cita:</p>
-          ${(p.bancoNombre||p.bancoNum)?`<div style="background:linear-gradient(135deg,#1a4a2e,#2d7a47);border-radius:14px;padding:18px;color:white;margin-bottom:14px;">
-            <div style="font-size:11px;color:rgba(255,255,255,0.6);text-transform:uppercase;margin-bottom:4px;">Banco</div>
-            <div style="font-size:18px;font-weight:800;margin-bottom:12px;">${p.bancoNombre||'—'}</div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.6);text-transform:uppercase;margin-bottom:4px;">Número de tarjeta / CLABE</div>
-            <div style="font-size:20px;font-weight:700;font-family:monospace;letter-spacing:2px;margin-bottom:12px;">${p.bancoNum||'—'}</div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.6);text-transform:uppercase;margin-bottom:4px;">Titular</div>
-            <div style="font-size:15px;font-weight:600;">${p.bancoTitular||'—'}</div>
-          </div>`:''}
+          ${(p.bancoNombre||p.bancoNum)?`<div style="background:linear-gradient(135deg,#1a4a2e,#2d7a47);border-radius:14px;padding:18px;color:white;margin-bottom:14px;"><div style="font-size:11px;color:rgba(255,255,255,0.6);text-transform:uppercase;margin-bottom:4px;">Banco</div><div style="font-size:18px;font-weight:800;margin-bottom:12px;">${p.bancoNombre||'—'}</div><div style="font-size:11px;color:rgba(255,255,255,0.6);text-transform:uppercase;margin-bottom:4px;">Número</div><div style="font-size:20px;font-weight:700;font-family:monospace;letter-spacing:2px;margin-bottom:12px;">${p.bancoNum||'—'}</div><div style="font-size:11px;color:rgba(255,255,255,0.6);text-transform:uppercase;margin-bottom:4px;">Titular</div><div style="font-size:15px;font-weight:600;">${p.bancoTitular||'—'}</div></div>`:''}
           ${p.bancoImg?`<img src="${p.bancoImg}" style="width:100%;border-radius:12px;margin-bottom:14px;" alt="Datos bancarios">`:''}
-          <div style="background:var(--al);border:1px solid var(--ab);border-radius:10px;padding:10px 12px;margin-bottom:14px;font-size:13px;color:var(--amb);">
-            📌 Deposita y manda tu comprobante por WhatsApp para confirmar.
-          </div>
-          <a href="whatsapp://send?phone=${waNum}&text=${waMsg}" style="display:block;width:100%;padding:14px;border-radius:12px;background:#25d366;color:white;font-size:15px;font-weight:700;text-align:center;text-decoration:none;margin-bottom:8px;">
-            📱 Enviar comprobante por WhatsApp
-          </a>
-          <a href="https://wa.me/${waNum}?text=${waMsg}" target="_blank" style="display:block;width:100%;padding:12px;border-radius:12px;background:white;color:#25d366;border:1.5px solid #25d366;font-size:13px;font-weight:600;text-align:center;text-decoration:none;">
-            💬 Abrir WhatsApp Web (computadora)
-          </a>
+          <a href="https://wa.me/${waNum}?text=${waMsg}" target="_blank" style="display:block;width:100%;padding:14px;border-radius:12px;background:#25d366;color:white;font-size:15px;font-weight:700;text-align:center;text-decoration:none;">📱 Enviar comprobante por WhatsApp</a>
         </div>
       </div>
-
       <div class="info-card">
         <h3>⭐ Reseñas de pacientes (${reviews.length})</h3>
-        ${reviews.length?reviews.slice(-5).reverse().map(r=>`
-          <div class="review-card">
-            <div class="review-top">
-              <div class="review-av">${r.nombre?.charAt(0)||'?'}</div>
-              <div><div class="review-name">${r.nombre||'Paciente'}</div><div style="display:flex;gap:2px;">${[1,2,3,4,5].map(i=>`<span style="font-size:12px;color:${i<=r.stars?'#f5a623':'#ddd'};">★</span>`).join('')}</div></div>
-              <div class="review-date">${r.fecha||''}</div>
-            </div>
-            <div class="review-text">${r.texto}</div>
-          </div>`).join(''):'<div style="text-align:center;padding:16px;color:var(--t3);font-size:13px;">Sin reseñas aún. ¡Sé el primero!</div>'}
-        <div class="review-form">
-          <h4>Deja tu reseña</h4>
-          <div class="star-select" id="star-select-${c.id}">
-            <span onclick="selReviewStar('${c.id}',1,this)">★</span>
-            <span onclick="selReviewStar('${c.id}',2,this)">★</span>
-            <span onclick="selReviewStar('${c.id}',3,this)">★</span>
-            <span onclick="selReviewStar('${c.id}',4,this)">★</span>
-            <span onclick="selReviewStar('${c.id}',5,this)">★</span>
-          </div>
-          <div class="fi-row" style="margin-bottom:8px;">
-            <input class="fi" id="rev-nombre-${c.id}" placeholder="Tu nombre">
-            <input class="fi" id="rev-texto-${c.id}" placeholder="Tu experiencia...">
-          </div>
+        ${reviews.length?reviews.slice(-5).reverse().map(r=>`<div class="review-card"><div class="review-top"><div class="review-av">${r.nombre?.charAt(0)||'?'}</div><div><div class="review-name">${r.nombre||'Paciente'}</div><div style="display:flex;gap:2px;">${[1,2,3,4,5].map(i=>`<span style="font-size:12px;color:${i<=r.stars?'#f5a623':'#ddd'};">★</span>`).join('')}</div></div><div class="review-date">${r.fecha||''}</div></div><div class="review-text">${r.texto}</div></div>`).join(''):'<div style="text-align:center;padding:16px;color:var(--t3);font-size:13px;">Sin reseñas aún.</div>'}
+        <div class="review-form"><h4>Deja tu reseña</h4>
+          <div class="star-select" id="star-select-${c.id}"><span onclick="selReviewStar('${c.id}',1,this)">★</span><span onclick="selReviewStar('${c.id}',2,this)">★</span><span onclick="selReviewStar('${c.id}',3,this)">★</span><span onclick="selReviewStar('${c.id}',4,this)">★</span><span onclick="selReviewStar('${c.id}',5,this)">★</span></div>
+          <div class="fi-row" style="margin-bottom:8px;"><input class="fi" id="rev-nombre-${c.id}" placeholder="Tu nombre"><input class="fi" id="rev-texto-${c.id}" placeholder="Tu experiencia..."></div>
           <button class="btn-agendar" onclick="enviarReview('${c.id}')">Publicar reseña</button>
         </div>
       </div>
@@ -929,14 +874,11 @@ async function renderPerfilDoctor(c,irAgendar=false){
 
   if(irAgendar) setTimeout(()=>document.getElementById('form-agendar')?.scrollIntoView({behavior:'smooth'}),300);
 }
+
 let citaEnProceso={};
 let reviewStars={};
 
-function selReviewStar(cid,n,el){
-  reviewStars[cid]=n;
-  const container=document.getElementById('star-select-'+cid);
-  if(container) container.querySelectorAll('span').forEach((s,i)=>{s.className=i<n?'sel':'';});
-}
+function selReviewStar(cid,n,el){reviewStars[cid]=n;const container=document.getElementById('star-select-'+cid);if(container)container.querySelectorAll('span').forEach((s,i)=>{s.className=i<n?'sel':'';});}
 
 async function enviarReview(cid){
   const nombre=document.getElementById('rev-nombre-'+cid)?.value?.trim();
@@ -948,7 +890,7 @@ async function enviarReview(cid){
   reviews.push({nombre,texto,stars,fecha:new Date().toLocaleDateString('es-MX',{day:'numeric',month:'short',year:'numeric'})});
   await dbSet('reviews-'+cid,JSON.stringify(reviews));
   const c=clientesDB.find(x=>x.id===cid);
-  if(c) renderPerfilDoctor(c,false);
+  if(c)renderPerfilDoctor(c,false);
   showToast('Reseña publicada ✓');
 }
 
@@ -958,7 +900,6 @@ async function enviarSolicitudCita(cid){
   const motivo=document.getElementById('ag-motivo')?.value?.trim();
   const fecha=document.getElementById('ag-fecha')?.value;
   if(!nombre||!tel||!motivo||!fecha){showToast('Llena todos los campos',true);return;}
-  // Guardar como paciente agendado en el CRM del doctor
   const pacRaw=await dbGet('pac-'+cid);
   const pacs=pacRaw?JSON.parse(pacRaw):[];
   const maxId=pacs.length>0?Math.max(...pacs.map(p=>Number(p.id)||0))+1:1000;
@@ -970,13 +911,6 @@ async function enviarSolicitudCita(cid){
   document.getElementById('anticipo-section').style.display='block';
   document.getElementById('anticipo-section').scrollIntoView({behavior:'smooth'});
   showToast('¡Cita registrada! Ahora realiza el anticipo.');
-}
-
-function abrirWAComprobante(wa){
-  const c=docPerfil;
-  const numero=wa||'526671234567';
-  const msg=`Hola, soy ${citaEnProceso.nombre||'paciente'}, acabo de agendar mi cita para el ${fmtF(citaEnProceso.fecha)||''} por motivo de: ${citaEnProceso.motivo||''}. Adjunto mi comprobante de anticipo.`;
-  window.open(`https://wa.me/${numero}?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
 // ══════════════════════════════════════════
@@ -995,13 +929,7 @@ function renderCRMClients(){
     </button>`;
 }
 
-function selCRMCliente(id,el){
-  clienteSelId=id;
-  document.querySelectorAll('.client-btn').forEach(b=>b.classList.remove('sel'));
-  el.classList.add('sel');
-  document.getElementById('pin-hint').textContent='Escribe tu PIN y toca Entrar';
-  document.getElementById('pin-input').focus();
-}
+function selCRMCliente(id,el){clienteSelId=id;document.querySelectorAll('.client-btn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');document.getElementById('pin-hint').textContent='Escribe tu PIN y toca Entrar';document.getElementById('pin-input').focus();}
 
 function mostrarRecuperarPin(){
   document.getElementById('modal-recuperar').style.display='flex';
@@ -1009,27 +937,14 @@ function mostrarRecuperarPin(){
   document.getElementById('recuperar-paso2').style.display='none';
   document.getElementById('recuperar-error').style.display='none';
   document.getElementById('recuperar-email').value='';
-  setTimeout(()=>document.getElementById('recuperar-email').focus(),200);
 }
-function cerrarRecuperarPin(){
-  document.getElementById('modal-recuperar').style.display='none';
-}
+function cerrarRecuperarPin(){document.getElementById('modal-recuperar').style.display='none';}
 function verificarCorreoRecuperacion(){
   const email=document.getElementById('recuperar-email').value.trim().toLowerCase();
   document.getElementById('recuperar-paso1').style.display='none';
-  // Verificar correo de agencia
-  if(email===AGENCIA_EMAIL.toLowerCase()){
-    document.getElementById('recuperar-pin-display').textContent=pinMaestro;
-    document.getElementById('recuperar-paso2').style.display='block';
-    return;
-  }
-  // Verificar correo de cliente registrado
+  if(email===AGENCIA_EMAIL.toLowerCase()){document.getElementById('recuperar-pin-display').textContent=pinMaestro;document.getElementById('recuperar-paso2').style.display='block';return;}
   const cliente=clientesDB.find(c=>c.email&&c.email.toLowerCase()===email&&c.activo);
-  if(cliente){
-    document.getElementById('recuperar-pin-display').textContent=cliente.pin;
-    document.getElementById('recuperar-paso2').style.display='block';
-    return;
-  }
+  if(cliente){document.getElementById('recuperar-pin-display').textContent=cliente.pin;document.getElementById('recuperar-paso2').style.display='block';return;}
   document.getElementById('recuperar-error').style.display='block';
 }
 
@@ -1055,7 +970,7 @@ function entrarCRM(cliente){
   document.getElementById('crm-login').style.display='none';
   document.getElementById('crm-app').style.display='block';
   document.getElementById('h-user').textContent=cliente.nombre+' · '+cliente.esp;
-  if(cliente.rol!=='agencia') cargarGoogleAPI();
+  if(cliente.rol!=='agencia')cargarGoogleAPI();
   cargarPacientes().then(()=>renderCRMTabs());
 }
 
@@ -1074,14 +989,27 @@ async function cargarClientesDB(){
   catch{clientesDB=[];}
   setSyncStatus(false);
 }
+
 async function guardarClientesDB(){setSyncStatus(true);await dbSet('clientes',JSON.stringify(clientesDB));setSyncStatus(false);}
+
 async function cargarPacientes(){
   setSyncStatus(true);
-  try{const p=await dbGet('pac-'+clienteActual.id);const r=await dbGet('rep-'+clienteActual.id);pacientes=p?JSON.parse(p):[];reporteDiario=r?JSON.parse(r):{};nextId=pacientes.length>0?Math.max(...pacientes.map(p=>Number(p.id)||0))+1:1000;}
-  catch{pacientes=[];reporteDiario={};}
+  try{
+    const p=await dbGet('pac-'+clienteActual.id);
+    const r=await dbGet('rep-'+clienteActual.id);
+    pacientes=p?JSON.parse(p):[];
+    reporteDiario=r?JSON.parse(r):{};
+    nextId=pacientes.length>0?Math.max(...pacientes.map(p=>Number(p.id)||0))+1:1000;
+  }catch{pacientes=[];reporteDiario={};}
   setSyncStatus(false);
 }
-async function guardarPacientes(){setSyncStatus(true);await dbSet('pac-'+clienteActual.id,JSON.stringify(pacientes));await dbSet('rep-'+clienteActual.id,JSON.stringify(reporteDiario));setSyncStatus(false);}
+
+async function guardarPacientes(){
+  setSyncStatus(true);
+  await dbSet('pac-'+clienteActual.id,JSON.stringify(pacientes));
+  await dbSet('rep-'+clienteActual.id,JSON.stringify(reporteDiario));
+  setSyncStatus(false);
+}
 
 // ══════════════════════════════════════════
 // CRM TABS
@@ -1090,7 +1018,7 @@ function renderCRMTabs(){
   const esAgencia=clienteActual.rol==='agencia';
   const tabs=esAgencia
     ?[{id:'clientes',lbl:'Clientes'},{id:'reportes',lbl:'Reportes'}]
-    :[{id:'resumen',lbl:'Resumen'},{id:'pacientes',lbl:'Pacientes'},{id:'calendario',lbl:'Agenda'},{id:'reporte',lbl:'Reporte'}];
+    :[{id:'resumen',lbl:'Resumen'},{id:'pacientes',lbl:'Pacientes'},{id:'calendario',lbl:'Agenda'},{id:'reporte',lbl:'Reporte'},{id:'historial',lbl:'Historial'}];
   document.getElementById('tabs-bar').innerHTML=tabs.map((t,i)=>
     `<div class="tab ${i===0?'active':''}" id="tab-${t.id}" onclick="setCRMTab('${t.id}',this)">${t.lbl}</div>`).join('');
   tabActual=tabs[0].id;
@@ -1112,6 +1040,7 @@ function renderCRM(){
   if(tabActual==='pacientes') c.innerHTML=renderPacientes();
   if(tabActual==='calendario')c.innerHTML=renderCalendario();
   if(tabActual==='reporte')   c.innerHTML=renderReporte();
+  if(tabActual==='historial') renderHistorialAsync();
   if(tabActual==='clientes')  renderClientesAsync();
   if(tabActual==='reportes')  renderReportesAsync();
 }
@@ -1127,12 +1056,12 @@ function renderResumen(){
   const citasHoy=ps.filter(p=>p.fecha&&p.fecha.startsWith(hoy()));
   const nuevosPublico=ps.filter(p=>p.origen==='publico'&&p.ts&&new Date(p.ts).toISOString().slice(0,10)>=sw).length;
   let alerts='';
-  if(inter>=5) alerts+=`<div class="alert amb"><strong>${inter} interesados sin agendar.</strong> Contactar hoy.</div>`;
-  if(citasHoy.length>0) alerts+=`<div class="alert grn"><strong>${citasHoy.length} cita${citasHoy.length>1?'s':''} hoy:</strong> ${citasHoy.map(p=>p.nombre).join(', ')}</div>`;
-  if(nuevosPublico>0) alerts+=`<div class="alert blue"><strong>${nuevosPublico} cita${nuevosPublico>1?'s':''} agendada${nuevosPublico>1?'s':''} desde la página</strong> esta semana.</div>`;
+  if(inter>=5)alerts+=`<div style="background:var(--al);border:1px solid var(--ab);border-radius:12px;padding:12px 14px;margin-bottom:10px;font-size:13px;color:var(--amb);"><strong>${inter} interesados sin agendar.</strong> Contactar hoy.</div>`;
+  if(citasHoy.length>0)alerts+=`<div style="background:var(--gl);border:1px solid var(--gb);border-radius:12px;padding:12px 14px;margin-bottom:10px;font-size:13px;color:var(--green);"><strong>${citasHoy.length} cita${citasHoy.length>1?'s':''} hoy:</strong> ${citasHoy.map(p=>p.nombre).join(', ')}</div>`;
+  if(nuevosPublico>0)alerts+=`<div style="background:var(--bl);border:1px solid var(--bb);border-radius:12px;padding:12px 14px;margin-bottom:10px;font-size:13px;color:var(--blue);"><strong>${nuevosPublico} cita${nuevosPublico>1?'s':''} agendada${nuevosPublico>1?'s':''} desde la página</strong> esta semana.</div>`;
   const gcalBtn=gcalToken
     ?`<button class="gcal-btn connected" onclick="desconectarGCal()">✓ Google Calendar conectado · Cambiar</button>`
-    :`<button class="gcal-btn" onclick="conectarGCal()"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#4285F4" d="M24 9.5c3.5 0 6.3 1.2 8.4 3.2l6.3-6.3C34.8 3 29.7 1 24 1 14.9 1 7.1 6.3 3.4 14l7.4 5.7C12.7 13.2 17.9 9.5 24 9.5z"/><path fill="#34A853" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.4c-.5 2.8-2.1 5.2-4.4 6.8l7 5.4c4.1-3.8 6.5-9.4 6.5-16.2z"/><path fill="#FBBC05" d="M10.8 28.7A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.8-4.7L2.9 13.6A23 23 0 0 0 1 24c0 3.7.9 7.2 2.4 10.3l7.4-5.6z"/><path fill="#EA4335" d="M24 47c5.7 0 10.5-1.9 14-5.1l-7-5.4c-1.9 1.3-4.3 2-7 2-6.1 0-11.3-3.7-13.2-9.2l-7.4 5.7C7.1 41.7 14.9 47 24 47z"/></svg>Conectar Google Calendar</button>`;
+    :`<button class="gcal-btn" onclick="conectarGCal()">📅 Conectar Google Calendar</button>`;
   return alerts+gcalBtn+`
   <div class="ia-box">
     <div class="ia-header"><div class="ia-icon">🤖</div><div><div class="ia-title">Registrar con IA</div><div class="ia-sub">Escribe en lenguaje natural — la IA hace todo</div></div></div>
@@ -1161,16 +1090,12 @@ function renderResumen(){
 
 // ── PACIENTES ──
 function renderPacientes(){
-  const grupos=[
-    {est:'interesado',lbl:'Interesados'},
-    {est:'agendado',lbl:'Agendados — con cita'},
-    {est:'seguimiento',lbl:'En seguimiento'},
-  ];
-  if(!pacientes.length) return `<div class="ia-box"><div class="ia-header"><div class="ia-icon">🤖</div><div><div class="ia-title">Registrar con IA</div></div></div><textarea class="ia-textarea" id="ia-input" rows="2" placeholder="Ej: María López al 6671234567 para el 27 de marzo..."></textarea><button class="ia-btn" onclick="procesarConIA()">✨ Analizar y registrar</button></div><div class="empty"><div class="empty-ico">👤</div><div class="empty-txt">Sin pacientes aún.</div></div>`;
+  const grupos=[{est:'interesado',lbl:'Interesados'},{est:'agendado',lbl:'Agendados — con cita'},{est:'seguimiento',lbl:'En seguimiento'}];
+  if(!pacientes.length)return`<div class="empty"><div class="empty-ico">👤</div><div class="empty-txt">Sin pacientes aún.</div></div>`;
   return grupos.map(g=>{
     const items=pacientes.filter(p=>p.estado===g.est);
-    if(!items.length) return '';
-    return `<div class="section-lbl">${g.lbl} (${items.length})</div>`+items.map(p=>`
+    if(!items.length)return'';
+    return`<div class="section-lbl">${g.lbl} (${items.length})</div>`+items.map(p=>`
       <div class="pac-card" onclick="abrirPaciente('${p.id}')">
         <div class="pc-top"><div class="pc-name">${p.nombre}</div>${PILL[p.estado]||''}</div>
         <div style="font-size:12px;color:var(--t2);margin-bottom:4px;">${p.notas||''}</div>
@@ -1195,7 +1120,7 @@ function renderCalendario(){
   const mesNom=calFecha.toLocaleString('es-MX',{month:'long',year:'numeric'});
   const todayStr=hoy();
   let cells=dias.map(d=>`<div class="cal-day-hdr">${d}</div>`).join('');
-  for(let i=0;i<offset;i++) cells+='<div class="cal-day empty"></div>';
+  for(let i=0;i<offset;i++)cells+='<div class="cal-day empty"></div>';
   for(let d=1;d<=diasMes;d++){
     const ds=`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     const tc=pacientes.some(p=>p.fecha&&p.fecha.startsWith(ds));
@@ -1205,38 +1130,63 @@ function renderCalendario(){
   const fechaRef=calDiaSel||todayStr;
   const citasDia=pacientes.filter(p=>p.fecha&&p.fecha.startsWith(fechaRef)).sort((a,b)=>a.fecha.localeCompare(b.fecha));
   const citasSection=citasDia.length
-    ?`<div class="section-lbl">Citas del ${new Date(fechaRef+'T12:00').toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'})}</div>
-      <div class="citas-dia">`+citasDia.map(p=>`
+    ?`<div class="section-lbl">Citas del ${new Date(fechaRef+'T12:00').toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'})}</div><div class="citas-dia">`+citasDia.map(p=>`
         <div class="cita-row" onclick="abrirPaciente('${p.id}')">
           <div class="cita-hora">${p.fecha?new Date(p.fecha).toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}):''}</div>
-          <div style="flex:1;"><div style="font-size:13px;font-weight:600;">${p.nombre}</div><div style="font-size:11px;color:var(--t3);">${p.tratamiento||'Sin motivo'} ${p.origen==='publico'?'· Agendó desde web':''}</div></div>
+          <div style="flex:1;"><div style="font-size:13px;font-weight:600;">${p.nombre}</div><div style="font-size:11px;color:var(--t3);">${p.tratamiento||'Sin motivo'} ${p.origen==='publico'?'· Web':''}</div></div>
           ${PILL[p.estado]||''}
         </div>`).join('')+'</div>'
     :`<div class="empty" style="padding:20px;"><div class="empty-txt">Sin citas para este día.</div></div>`;
-  return `<div class="cal-header">
-    <button class="cal-nav" onclick="cambiarMes(-1)">‹</button>
-    <div class="cal-title">${mesNom.charAt(0).toUpperCase()+mesNom.slice(1)}</div>
-    <button class="cal-nav" onclick="cambiarMes(1)">›</button>
-  </div>
-  <div class="cal-grid">${cells}</div>${citasSection}`;
+  return`<div class="cal-header"><button class="cal-nav" onclick="cambiarMes(-1)">‹</button><div class="cal-title">${mesNom.charAt(0).toUpperCase()+mesNom.slice(1)}</div><button class="cal-nav" onclick="cambiarMes(1)">›</button></div><div class="cal-grid">${cells}</div>${citasSection}`;
 }
 function selDia(ds){calDiaSel=ds;renderCRM();}
 function cambiarMes(dir){calFecha=new Date(calFecha.getFullYear(),calFecha.getMonth()+dir,1);renderCRM();}
 
-// ── REPORTE ──
+// ══════════════════════════════════════════
+// ── REPORTE (CON CAMPO SERVICIO DE SALUD) ──
+// ══════════════════════════════════════════
 function renderReporte(){
   const ps=pacientes,sw=semanaKey(),kh=hoy();
   const semana=ps.filter(p=>p.ts&&new Date(p.ts).toISOString().slice(0,10)>=sw).length;
-  const rd=reporteDiario[kh]||{mensajes:0,agendados:0,seguimientos:0};
+  const rd=reporteDiario[kh]||{mensajes:0,agendados:0,seguimientos:0,servicios:[]};
+  // Servicios ya seleccionados hoy
+  serviciosSeleccionados=rd.servicios||[];
   const tratCount={};ps.forEach(p=>{if(p.tratamiento)tratCount[p.tratamiento]=(tratCount[p.tratamiento]||0)+1;});
   const topTrats=Object.entries(tratCount).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  return `<div class="section-lbl">Conteo de hoy — ${new Date().toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'})}</div>
-  <div class="rep-card">${[{k:'mensajes',l:'Mensajes recibidos',c:'var(--blue)'},{k:'agendados',l:'Agendados hoy',c:'var(--green)'},{k:'seguimientos',l:'En seguimiento',c:'var(--purple)'}].map(i=>`
+
+  // Chips de servicios (predeterminados + personalizados del cliente)
+  const todosServicios=[...SERVICIOS_DEFAULT,...(clienteActual.campanias||[])];
+  const uniqueServicios=[...new Set(todosServicios)];
+  const chipsHTML=uniqueServicios.map(s=>{
+    const sel=serviciosSeleccionados.includes(s);
+    return`<div class="servicio-chip ${sel?'sel':''}" onclick="toggleServicio('${s.replace(/'/g,"\\'")}',this)">${sel?'✓ ':''} ${s}</div>`;
+  }).join('');
+
+  return`
+  <div class="section-lbl">Conteo de hoy — ${new Date().toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'})}</div>
+  <div class="rep-card">${[
+    {k:'mensajes',l:'Mensajes recibidos',c:'var(--blue)'},
+    {k:'agendados',l:'Agendados hoy',c:'var(--green)'},
+    {k:'seguimientos',l:'En seguimiento',c:'var(--purple)'}
+  ].map(i=>`
     <div class="rep-row"><div class="rep-lbl">${i.l}</div><div class="rep-ctrl">
       <button class="rep-btn minus" onclick="ajustarRep('${i.k}',-1)">−</button>
       <div class="rep-num" style="color:${i.c};" id="rep-${i.k}">${rd[i.k]||0}</div>
       <button class="rep-btn plus" onclick="ajustarRep('${i.k}',1)">+</button>
     </div></div>`).join('')}</div>
+
+  <!-- ── NUEVO: SERVICIO DE SALUD ── -->
+  <div style="background:white;border:1px solid var(--bord);border-radius:var(--r);padding:14px;margin-bottom:14px;">
+    <div style="font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">🩺 Servicio de salud por el que agendaron</div>
+    <div style="font-size:11px;color:var(--t3);margin-bottom:10px;">Selecciona los servicios por los que llegaron pacientes hoy</div>
+    <div class="servicios-grid" id="servicios-chips">${chipsHTML}</div>
+    <div style="display:flex;gap:8px;margin-top:6px;">
+      <input class="fi" id="servicio-custom-input" placeholder="Agregar servicio..." style="font-size:13px;padding:8px 12px;flex:1;">
+      <button onclick="agregarServicioCustom()" style="padding:8px 14px;border-radius:10px;background:var(--green);color:white;border:none;font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0;">+ Agregar</button>
+    </div>
+    ${serviciosSeleccionados.length?`<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--bord);"><div style="font-size:11px;color:var(--t3);margin-bottom:6px;">SELECCIONADOS HOY:</div><div class="hist-servicios">${serviciosSeleccionados.map(s=>`<span class="servicio-tag-small">✓ ${s}</span>`).join('')}</div></div>`:''}
+  </div>
+
   <div class="semana-card"><div class="num">${semana}</div><div class="lbl">Nuevos esta semana</div></div>
   <div class="mg3">
     <div class="mc amb"><div class="lbl">Interesados</div><div class="val">${ps.filter(p=>p.estado==='interesado').length}</div></div>
@@ -1247,19 +1197,251 @@ function renderReporte(){
   <button class="btn-full" style="background:var(--green);color:white;border:none;" onclick="copiarReporte()">📄 Descargar reporte PDF</button>`;
 }
 
+// ── Toggle servicio de salud ──
+function toggleServicio(nombre, el){
+  const idx=serviciosSeleccionados.indexOf(nombre);
+  if(idx>=0){
+    serviciosSeleccionados.splice(idx,1);
+    el.classList.remove('sel');
+    el.textContent=nombre;
+  }else{
+    serviciosSeleccionados.push(nombre);
+    el.classList.add('sel');
+    el.textContent='✓ '+nombre;
+  }
+  guardarServiciosHoy();
+  // Actualizar sección "seleccionados hoy"
+  const kh=hoy();
+  const rd=reporteDiario[kh]||{};
+  const container=document.querySelector('#crm-content .servicios-grid');
+  const nextEl=container?.nextElementSibling?.nextElementSibling;
+  if(serviciosSeleccionados.length){
+    const html=`<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--bord);"><div style="font-size:11px;color:var(--t3);margin-bottom:6px;">SELECCIONADOS HOY:</div><div class="hist-servicios">${serviciosSeleccionados.map(s=>`<span class="servicio-tag-small">✓ ${s}</span>`).join('')}</div></div>`;
+    if(nextEl&&nextEl.classList.contains('hist-servicios-resumen')){nextEl.outerHTML=html;}
+    else if(container){container.insertAdjacentHTML('afterend',html);container.nextElementSibling.classList.add('hist-servicios-resumen');}
+  }
+}
+
+function agregarServicioCustom(){
+  const input=document.getElementById('servicio-custom-input');
+  const val=input?.value?.trim();
+  if(!val)return;
+  if(!serviciosSeleccionados.includes(val))serviciosSeleccionados.push(val);
+  guardarServiciosHoy();
+  input.value='';
+  renderCRM(); // re-render para mostrar el chip nuevo
+  showToast(`"${val}" registrado ✓`);
+}
+
+async function guardarServiciosHoy(){
+  const kh=hoy();
+  if(!reporteDiario[kh])reporteDiario[kh]={mensajes:0,agendados:0,seguimientos:0,servicios:[]};
+  reporteDiario[kh].servicios=[...serviciosSeleccionados];
+  await guardarPacientes();
+}
+
 function ajustarRep(k,d){
-  const kh=hoy();if(!reporteDiario[kh])reporteDiario[kh]={mensajes:0,agendados:0,seguimientos:0};
+  const kh=hoy();
+  if(!reporteDiario[kh])reporteDiario[kh]={mensajes:0,agendados:0,seguimientos:0,servicios:[]};
   reporteDiario[kh][k]=Math.max(0,(reporteDiario[kh][k]||0)+d);
   const el=document.getElementById('rep-'+k);if(el)el.textContent=reporteDiario[kh][k];
   guardarPacientes();
 }
 
+// ══════════════════════════════════════════
+// ── HISTORIAL POR DÍA (NUEVO TAB) ──
+// ══════════════════════════════════════════
+async function renderHistorialAsync(){
+  document.getElementById('crm-content').innerHTML=`<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">Cargando historial...</div></div>`;
+
+  // reporteDiario ya está cargado desde Firebase
+  const dias=Object.keys(reporteDiario).sort((a,b)=>b.localeCompare(a)); // más reciente primero
+
+  if(!dias.length){
+    document.getElementById('crm-content').innerHTML=`<div class="empty"><div class="empty-ico">📅</div><div class="empty-txt">Sin reportes guardados aún.<br>Comienza registrando resultados en la pestaña Reporte.</div></div>`;
+    return;
+  }
+
+  const totalMensajes=dias.reduce((acc,d)=>acc+(reporteDiario[d]?.mensajes||0),0);
+  const totalAgendados=dias.reduce((acc,d)=>acc+(reporteDiario[d]?.agendados||0),0);
+
+  // Resumen global
+  let html=`
+  <div style="background:linear-gradient(135deg,var(--green),var(--gm));border-radius:16px;padding:16px;margin-bottom:16px;color:white;">
+    <div style="font-size:11px;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Resumen acumulado</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;">
+      <div><div style="font-size:24px;font-weight:900;">${dias.length}</div><div style="font-size:10px;color:rgba(255,255,255,0.7);">días</div></div>
+      <div><div style="font-size:24px;font-weight:900;">${totalMensajes}</div><div style="font-size:10px;color:rgba(255,255,255,0.7);">mensajes</div></div>
+      <div><div style="font-size:24px;font-weight:900;">${totalAgendados}</div><div style="font-size:10px;color:rgba(255,255,255,0.7);">agendados</div></div>
+    </div>
+  </div>
+
+  <!-- Servicios más frecuentes en el historial -->
+  ${renderServiciosFrecuentes()}
+
+  <div class="section-lbl">Historial por día (${dias.length} días)</div>`;
+
+  // Cards por día
+  html+=dias.map(fecha=>{
+    const rd=reporteDiario[fecha]||{};
+    const servicios=rd.servicios||[];
+    const msgs=rd.mensajes||0;
+    const agend=rd.agendados||0;
+    const seg=rd.seguimientos||0;
+    const esHoy=fecha===hoy();
+    return`
+    <div class="hist-day-card">
+      <div class="hist-day-header" onclick="toggleHistDay('${fecha}')">
+        <div>
+          <div class="hist-day-fecha">${esHoy?'📌 HOY — ':''}${fmtFecha(fecha)}</div>
+          <div class="hist-day-resumen">Msgs: ${msgs} · Agend: ${agend} · Seg: ${seg}${servicios.length?' · '+servicios.length+' servicio'+(servicios.length>1?'s':''):''}</div>
+        </div>
+        <div class="hist-day-pills">
+          ${msgs?`<span class="hist-pill msgs">${msgs} msgs</span>`:''}
+          ${agend?`<span class="hist-pill agend">${agend} agend.</span>`:''}
+          <span style="font-size:14px;color:var(--t3);" id="arrow-${fecha}">›</span>
+        </div>
+      </div>
+      <div class="hist-day-body" id="body-${fecha}">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;text-align:center;">
+          <div style="background:var(--bl);border:1px solid var(--bb);border-radius:10px;padding:10px;"><div style="font-size:20px;font-weight:800;color:var(--blue);">${msgs}</div><div style="font-size:10px;color:var(--t3);">Mensajes</div></div>
+          <div style="background:var(--gl);border:1px solid var(--gb);border-radius:10px;padding:10px;"><div style="font-size:20px;font-weight:800;color:var(--green);">${agend}</div><div style="font-size:10px;color:var(--t3);">Agendados</div></div>
+          <div style="background:var(--pl);border:1px solid var(--pb);border-radius:10px;padding:10px;"><div style="font-size:20px;font-weight:800;color:var(--purple);">${seg}</div><div style="font-size:10px;color:var(--t3);">Seguimiento</div></div>
+        </div>
+        ${servicios.length?`
+          <div style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">🩺 Servicios agendados:</div>
+          <div class="hist-servicios">${servicios.map(s=>`<span class="servicio-tag-small">${s}</span>`).join('')}</div>
+        `:`<div style="font-size:12px;color:var(--t3);">Sin servicios registrados este día.</div>`}
+      </div>
+    </div>`;
+  }).join('');
+
+  html+=`<button class="btn-full" style="background:var(--green);color:white;border:none;margin-top:12px;" onclick="exportarHistorialPDF()">📄 Exportar historial completo PDF</button>`;
+
+  document.getElementById('crm-content').innerHTML=html;
+}
+
+function renderServiciosFrecuentes(){
+  const conteo={};
+  Object.values(reporteDiario).forEach(rd=>{
+    (rd.servicios||[]).forEach(s=>{conteo[s]=(conteo[s]||0)+1;});
+  });
+  const top=Object.entries(conteo).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  if(!top.length)return'';
+  return`<div style="background:white;border:1px solid var(--bord);border-radius:var(--r);padding:14px;margin-bottom:14px;">
+    <div style="font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">🩺 Servicios más frecuentes</div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      ${top.map(([s,n])=>`
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="flex:1;font-size:13px;">${s}</div>
+          <div style="background:var(--gl);border:1px solid var(--gb);border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;color:var(--green);">${n} día${n>1?'s':''}</div>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function toggleHistDay(fecha){
+  const body=document.getElementById('body-'+fecha);
+  const arrow=document.getElementById('arrow-'+fecha);
+  if(body){
+    body.classList.toggle('open');
+    if(arrow)arrow.textContent=body.classList.contains('open')?'˅':'›';
+  }
+}
+
+async function exportarHistorialPDF(){
+  try{
+    const {jsPDF}=window.jspdf;
+    const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    const W=210,pad=18;
+    let y=0;
+    const fechaStr=new Date().toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+    // Header
+    doc.setFillColor(26,74,46);doc.rect(0,0,W,38,'F');
+    doc.setFont('helvetica','bold');doc.setFontSize(18);doc.setTextColor(255,255,255);
+    doc.text('ImpulsoTuConsulta',pad,16);
+    doc.setFontSize(10);doc.setFont('helvetica','normal');doc.setTextColor(126,207,154);
+    doc.text('Historial de reportes · '+clienteActual.nombre,pad,24);
+    doc.setTextColor(255,255,255);doc.setFontSize(9);
+    doc.text(fechaStr.charAt(0).toUpperCase()+fechaStr.slice(1),pad,32);
+
+    y=50;
+    const dias=Object.keys(reporteDiario).sort((a,b)=>b.localeCompare(a));
+    const totalMensajes=dias.reduce((acc,d)=>acc+(reporteDiario[d]?.mensajes||0),0);
+    const totalAgendados=dias.reduce((acc,d)=>acc+(reporteDiario[d]?.agendados||0),0);
+
+    // Resumen
+    doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(26,74,46);
+    doc.text('Resumen acumulado',pad,y);y+=10;
+    doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(26,25,23);
+    doc.text(`${dias.length} días registrados · ${totalMensajes} mensajes totales · ${totalAgendados} agendados totales`,pad,y);y+=14;
+
+    // Servicios frecuentes
+    const conteo={};
+    Object.values(reporteDiario).forEach(rd=>{(rd.servicios||[]).forEach(s=>{conteo[s]=(conteo[s]||0)+1;});});
+    const top=Object.entries(conteo).sort((a,b)=>b[1]-a[1]).slice(0,8);
+    if(top.length){
+      doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(155,152,144);
+      doc.text('SERVICIOS MÁS FRECUENTES',pad,y);y+=7;
+      top.forEach(([s,n])=>{
+        doc.setFillColor(232,244,236);doc.roundedRect(pad,y-4,W-pad*2,10,2,2,'F');
+        doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(26,25,23);
+        doc.text(s,pad+4,y+3);
+        doc.setFont('helvetica','bold');doc.setTextColor(26,74,46);
+        doc.text(n+' día'+(n>1?'s':''),W-pad-4,y+3,{align:'right'});
+        y+=13;
+      });
+      y+=4;
+    }
+
+    doc.setDrawColor(184,216,196);doc.setLineWidth(0.5);doc.line(pad,y,W-pad,y);y+=8;
+    doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(155,152,144);
+    doc.text('DETALLE POR DÍA',pad,y);y+=8;
+
+    // Días
+    for(const fecha of dias){
+      if(y>260){doc.addPage();y=20;}
+      const rd=reporteDiario[fecha]||{};
+      const servicios=rd.servicios||[];
+      doc.setFillColor(245,244,240);doc.roundedRect(pad,y,W-pad*2,servicios.length?26:16,2,2,'F');
+      doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(26,25,23);
+      doc.text(fmtFecha(fecha)+(fecha===hoy()?' (HOY)':''),pad+4,y+7);
+      doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(107,105,96);
+      doc.text(`Msgs: ${rd.mensajes||0}  ·  Agendados: ${rd.agendados||0}  ·  Seguimiento: ${rd.seguimientos||0}`,pad+4,y+14);
+      if(servicios.length){
+        doc.setTextColor(26,74,46);doc.setFont('helvetica','bold');
+        const sText=servicios.join(' · ');
+        doc.setFontSize(8);
+        doc.text('🩺 '+sText.slice(0,80)+(sText.length>80?'...':''),pad+4,y+21);
+      }
+      y+=(servicios.length?30:20);
+    }
+
+    // Footer
+    y=Math.max(y+6,268);
+    doc.setDrawColor(184,216,196);doc.setLineWidth(0.3);doc.line(pad,y,W-pad,y);y+=6;
+    doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(155,152,144);
+    doc.text('ImpulsoTuConsulta · impulsoagenciadigital.com',W/2,y,{align:'center'});
+
+    doc.save(`Historial_${(clienteActual.nombre||'doctor').replace(/\s+/g,'_')}_${hoy()}.pdf`);
+    showToast('📄 Historial PDF descargado ✓');
+  }catch(err){
+    console.error('PDF historial error:',err);
+    showToast('Error al generar PDF',true);
+  }
+}
+
+// ══════════════════════════════════════════
+// REPORTE PDF (incluye servicios de salud)
+// ══════════════════════════════════════════
 function copiarReporte(){
   const kh=hoy(),rd=reporteDiario[kh]||{},ps=pacientes,sw=semanaKey();
   const sem=ps.filter(p=>p.ts&&new Date(p.ts).toISOString().slice(0,10)>=sw).length;
   const fechaStr=new Date().toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   const tratCount={};ps.forEach(p=>{if(p.tratamiento)tratCount[p.tratamiento]=(tratCount[p.tratamiento]||0)+1;});
   const topTrats=Object.entries(tratCount).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const serviciosHoy=rd.servicios||[];
 
   try{
     const {jsPDF}=window.jspdf;
@@ -1267,28 +1449,19 @@ function copiarReporte(){
     const W=210,pad=18;
     let y=0;
 
-    // Header verde
-    doc.setFillColor(26,74,46);
-    doc.rect(0,0,W,38,'F');
-    doc.setFont('helvetica','bold');
-    doc.setFontSize(18);doc.setTextColor(255,255,255);
+    doc.setFillColor(26,74,46);doc.rect(0,0,W,38,'F');
+    doc.setFont('helvetica','bold');doc.setFontSize(18);doc.setTextColor(255,255,255);
     doc.text('ImpulsoTuConsulta',pad,16);
-    doc.setFontSize(10);doc.setFont('helvetica','normal');
-    doc.setTextColor(126,207,154);
+    doc.setFontSize(10);doc.setFont('helvetica','normal');doc.setTextColor(126,207,154);
     doc.text('Reporte diario · CRM Médico',pad,24);
-    doc.setTextColor(255,255,255);
-    doc.setFontSize(9);
+    doc.setTextColor(255,255,255);doc.setFontSize(9);
     doc.text(fechaStr.charAt(0).toUpperCase()+fechaStr.slice(1),pad,32);
 
     y=50;
-    // Nombre del doctor
     doc.setFont('helvetica','bold');doc.setFontSize(14);doc.setTextColor(26,74,46);
     doc.text(clienteActual.nombre||'Doctor',pad,y);y+=10;
-
-    // Línea divisora
     doc.setDrawColor(184,216,196);doc.setLineWidth(0.5);doc.line(pad,y,W-pad,y);y+=8;
 
-    // Sección: Conteo del día
     doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(155,152,144);
     doc.text('CONTEO DEL DÍA',pad,y);y+=7;
 
@@ -1306,8 +1479,20 @@ function copiarReporte(){
       y+=16;
     });
 
-    y+=2;
-    // Semana
+    // ── SERVICIOS DE SALUD ──
+    if(serviciosHoy.length){
+      y+=4;
+      doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(155,152,144);
+      doc.text('SERVICIOS DE SALUD POR LOS QUE AGENDARON',pad,y);y+=7;
+      doc.setFillColor(232,244,236);doc.roundedRect(pad,y-4,W-pad*2,serviciosHoy.length<=4?14:18,2,2,'F');
+      doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(26,74,46);
+      const sText='🩺 '+serviciosHoy.join('  ·  ');
+      const lines=doc.splitTextToSize(sText,W-pad*2-8);
+      lines.slice(0,3).forEach((line,i)=>{doc.text(line,pad+4,y+4+i*5);});
+      y+=Math.max(14,4+lines.slice(0,3).length*5+4);
+    }
+
+    y+=4;
     doc.setFillColor(26,74,46);doc.roundedRect(pad,y,W-pad*2,18,3,3,'F');
     doc.setFont('helvetica','bold');doc.setFontSize(22);doc.setTextColor(255,255,255);
     doc.text(String(sem),W/2,y+13,{align:'center'});
@@ -1315,7 +1500,6 @@ function copiarReporte(){
     doc.text('NUEVOS ESTA SEMANA',W/2,y+6,{align:'center'});
     y+=26;
 
-    // Totales por estado
     doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(155,152,144);
     doc.text('ESTADO GENERAL DE PACIENTES',pad,y);y+=7;
     const estados=[
@@ -1334,7 +1518,6 @@ function copiarReporte(){
     });
     y+=26;
 
-    // Campañas top
     if(topTrats.length){
       doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(155,152,144);
       doc.text('CAMPAÑAS MÁS FRECUENTES',pad,y);y+=7;
@@ -1348,7 +1531,6 @@ function copiarReporte(){
       });
     }
 
-    // Footer
     y=Math.max(y+10,260);
     doc.setDrawColor(184,216,196);doc.setLineWidth(0.3);doc.line(pad,y,W-pad,y);y+=6;
     doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(155,152,144);
@@ -1359,14 +1541,13 @@ function copiarReporte(){
     showToast('📄 PDF descargado ✓');
   }catch(err){
     console.error('PDF error:',err);
-    // Fallback: copiar al portapapeles
-    const txt=`📊 Reporte — ${clienteActual.nombre}\n${fechaStr}\n${'─'.repeat(36)}\nMensajes: ${rd.mensajes||0} · Agendados: ${rd.agendados||0} · Seguimiento: ${rd.seguimientos||0}\nNuevos esta semana: ${sem}\nInteresados: ${ps.filter(p=>p.estado==='interesado').length} · Agendados: ${ps.filter(p=>p.estado==='agendado').length} · Seguimiento: ${ps.filter(p=>p.estado==='seguimiento').length}\n${'─'.repeat(36)}\nImpulsoTuConsulta`;
-    if(navigator.clipboard)navigator.clipboard.writeText(txt);
-    showToast('Reporte copiado ✓');
+    showToast('Error al generar PDF',true);
   }
 }
 
-// ── AGENCIA: CLIENTES ──
+// ══════════════════════════════════════════
+// AGENCIA: CLIENTES
+// ══════════════════════════════════════════
 async function renderClientesAsync(){
   document.getElementById('crm-content').innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">Cargando...</div></div>';
   const activos=clientesDB.filter(c=>c.activo),desactivos=clientesDB.filter(c=>!c.activo);
@@ -1402,33 +1583,31 @@ async function renderClientesAsync(){
 
 async function renderReportesAsync(){
   document.getElementById('crm-content').innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">Cargando...</div></div>';
-  const kh=hoy();let html=`<div class="section-lbl">Reporte del día</div>`;let txt=`📊 REPORTE AGENCIA — ${new Date().toLocaleDateString('es-MX')}\n${'─'.repeat(38)}\n`;
+  const kh=hoy();let html=`<div class="section-lbl">Reporte del día</div>`;
   for(const c of clientesDB.filter(x=>x.activo)){
     try{
       const rp=await dbGet('pac-'+c.id);const rr=await dbGet('rep-'+c.id);
       const ps=rp?JSON.parse(rp):[];const rep=rr?JSON.parse(rr):{};const rd=rep[kh]||{};
       const sw=semanaKey();const sem=ps.filter(p=>p.ts&&new Date(p.ts).toISOString().slice(0,10)>=sw).length;
       const pub=ps.filter(p=>p.origen==='publico').length;
+      const servicios=rd.servicios||[];
       html+=`<div style="background:white;border:1px solid var(--bord);border-radius:14px;padding:14px;margin-bottom:10px;">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
           <div class="cr-av" style="background:${c.bg};color:${c.fg};width:32px;height:32px;font-size:11px;">${c.ini}</div>
           <div style="font-weight:700;font-size:13px;flex:1;">${c.nombre}</div>
           <div style="font-size:11px;color:var(--t3);">${sem}/sem · ${pub} web</div>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center;font-size:11px;">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center;font-size:11px;margin-bottom:8px;">
           <div><div style="font-size:18px;font-weight:800;color:var(--blue);">${rd.mensajes||0}</div><div style="color:var(--t3);">mensajes</div></div>
           <div><div style="font-size:18px;font-weight:800;color:var(--green);">${rd.agendados||0}</div><div style="color:var(--t3);">agendados</div></div>
           <div><div style="font-size:18px;font-weight:800;color:var(--purple);">${rd.seguimientos||0}</div><div style="color:var(--t3);">seguimiento</div></div>
         </div>
+        ${servicios.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;">${servicios.map(s=>`<span class="servicio-tag-small">${s}</span>`).join('')}</div>`:''}
         <div style="margin-top:6px;font-size:11px;color:var(--t3);text-align:center;">Inter: ${ps.filter(p=>p.estado==='interesado').length} · Agend: ${ps.filter(p=>p.estado==='agendado').length} · Seg: ${ps.filter(p=>p.estado==='seguimiento').length}</div>
       </div>`;
-      txt+=`\n${c.nombre}: mensajes ${rd.mensajes||0} · agendados ${rd.agendados||0} · sem ${sem} · web ${pub}\n`;
     }catch{}
   }
-  txt+=`\n${'─'.repeat(38)}\nImpulsoTuConsulta`;
   html+=`<button class="btn-full" style="background:var(--green);color:white;border:none;margin-top:8px;" onclick="descargarReporteAgenciaPDF()">📄 Descargar reporte PDF</button>`;
-  window._reporteAgenciaTxt=txt;
-  window._reporteAgenciaData=clientesDB.filter(x=>x.activo);
   document.getElementById('crm-content').innerHTML=html;
 }
 
@@ -1440,8 +1619,6 @@ async function descargarReporteAgenciaPDF(){
     const kh=hoy();
     const fechaStr=new Date().toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
     let y=0;
-
-    // Header
     doc.setFillColor(26,74,46);doc.rect(0,0,W,38,'F');
     doc.setFont('helvetica','bold');doc.setFontSize(18);doc.setTextColor(255,255,255);
     doc.text('ImpulsoTuConsulta',pad,16);
@@ -1449,7 +1626,6 @@ async function descargarReporteAgenciaPDF(){
     doc.text('Reporte de agencia · Todos los clientes',pad,24);
     doc.setTextColor(255,255,255);doc.setFontSize(9);
     doc.text(fechaStr.charAt(0).toUpperCase()+fechaStr.slice(1),pad,32);
-
     y=50;
     doc.setFont('helvetica','bold');doc.setFontSize(14);doc.setTextColor(26,74,46);
     doc.text('Resumen del día — Agencia',pad,y);y+=10;
@@ -1462,55 +1638,44 @@ async function descargarReporteAgenciaPDF(){
         const ps=rp?JSON.parse(rp):[];const rep=rr?JSON.parse(rr):{};const rd=rep[kh]||{};
         const sw=semanaKey();const sem=ps.filter(p=>p.ts&&new Date(p.ts).toISOString().slice(0,10)>=sw).length;
         const pub=ps.filter(p=>p.origen==='publico').length;
-
+        const servicios=rd.servicios||[];
         if(y>250){doc.addPage();y=20;}
-
-        // Card del cliente
-        doc.setFillColor(248,248,246);doc.roundedRect(pad,y,W-pad*2,32,3,3,'F');
-        doc.setDrawColor(226,224,216);doc.setLineWidth(0.3);doc.roundedRect(pad,y,W-pad*2,32,3,3,'S');
-
-        // Avatar color
-        const bgHex=c.bg||'#e8f4ec';
-        doc.setFillColor(bgHex);doc.circle(pad+8,y+16,7,'F');
-        doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(26,74,46);
-        doc.text(c.ini||'?',pad+8,y+19,{align:'center'});
-
+        const cardH=servicios.length?40:30;
+        doc.setFillColor(248,248,246);doc.roundedRect(pad,y,W-pad*2,cardH,3,3,'F');
+        doc.setDrawColor(226,224,216);doc.setLineWidth(0.3);doc.roundedRect(pad,y,W-pad*2,cardH,3,3,'S');
         doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(26,25,23);
-        doc.text(c.nombre,pad+18,y+10);
+        doc.text(c.nombre,pad+4,y+8);
         doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(107,105,96);
-        doc.text(`${sem} nuevos/sem · ${pub} del directorio web`,pad+18,y+17);
-
-        // Métricas
+        doc.text(`${sem} nuevos/sem · ${pub} del directorio web`,pad+4,y+14);
         const cols=[
           {lbl:'Mensajes',val:rd.mensajes||0,r:26,g:58,b:138},
           {lbl:'Agendados',val:rd.agendados||0,r:26,g:74,b:46},
           {lbl:'Seguimiento',val:rd.seguimientos||0,r:74,g:26,b:138},
           {lbl:'Total pac.',val:ps.length,r:26,g:25,b:23},
         ];
-        const cw=(W-pad*2-18-8)/4;
+        const cw=(W-pad*2-8)/4;
         cols.forEach((m,i)=>{
-          const x=pad+18+i*(cw+2.5);
-          doc.setFont('helvetica','bold');doc.setFontSize(14);doc.setTextColor(m.r,m.g,m.b);
-          doc.text(String(m.val),x+cw/2,y+27,{align:'center'});
+          const x=pad+i*(cw+2);
+          doc.setFont('helvetica','bold');doc.setFontSize(13);doc.setTextColor(m.r,m.g,m.b);
+          doc.text(String(m.val),x+cw/2,y+24,{align:'center'});
           doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(155,152,144);
-          doc.text(m.lbl,x+cw/2,y+32,{align:'center'});
+          doc.text(m.lbl,x+cw/2,y+29,{align:'center'});
         });
-        y+=38;
+        if(servicios.length){
+          doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(26,74,46);
+          const sText='🩺 '+servicios.join(' · ');
+          doc.text(sText.slice(0,80),pad+4,y+37);
+        }
+        y+=cardH+6;
       }catch{}
     }
-
-    // Footer
     y=Math.max(y+10,268);
     doc.setDrawColor(184,216,196);doc.setLineWidth(0.3);doc.line(pad,y,W-pad,y);y+=6;
     doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(155,152,144);
     doc.text('Generado por ImpulsoTuConsulta · impulsoagenciadigital.com',W/2,y,{align:'center'});
-
     doc.save(`Reporte_Agencia_${kh}.pdf`);
     showToast('📄 PDF descargado ✓');
-  }catch(err){
-    console.error('PDF agencia error:',err);
-    if(navigator.clipboard&&window._reporteAgenciaTxt)navigator.clipboard.writeText(window._reporteAgenciaTxt).then(()=>showToast('Reporte copiado ✓'));
-  }
+  }catch(err){console.error('PDF agencia error:',err);showToast('Error al generar PDF',true);}
 }
 
 // ── GESTIÓN CLIENTES ──
@@ -1625,11 +1790,8 @@ function abrirEditarPerfil(id){
   document.getElementById('sp-instagram').value=p.instagram||'';
   document.getElementById('sp-facebook').value=p.facebook||'';
   document.getElementById('sp-fotos').value=(p.fotos||[]).join('\n');
-  fotosConsultorioActuales = p.fotos||[];
-  setTimeout(()=>{
-    actualizarPreviewFoto(p.foto||'');
-    actualizarPreviewFotosArray(p.fotos||[]);
-  },100);
+  fotosConsultorioActuales=p.fotos||[];
+  setTimeout(()=>{actualizarPreviewFoto(p.foto||'');actualizarPreviewFotosArray(p.fotos||[]);},100);
   document.getElementById('sp-enfermedades').value=(p.enfermedades||[]).join('\n');
   document.getElementById('sp-precios').value=(p.precios||[]).map(s=>`${s.servicio}|${s.precio}${s.descripcion?'|'+s.descripcion:''}`).join('\n');
   document.getElementById('sp-maps-url').value=p.mapsUrl||'';
@@ -1653,154 +1815,104 @@ function abrirEditarPerfil(id){
   document.getElementById('sp-banco-titular').value=p.bancoTitular||'';
   document.getElementById('sp-banco-img').value=p.bancoImg||'';
   spStars=p.estrellas||5;spVisibilidad=p.visible!==false;
-  actualizarStarsUI(spStars);
-  actualizarVisibilidadUI(spVisibilidad);
+  actualizarStarsUI(spStars);actualizarVisibilidadUI(spVisibilidad);
   abrirSheet('sheet-perfil-pub');
 }
 
 // ══════════════════════════════════════════
-// SUBIR Y RECORTAR FOTOS — sin servicios externos
-// Las imágenes se convierten a base64 y se guardan en Firebase
+// FOTOS
 // ══════════════════════════════════════════
-let cropCallback = null;
-let cropZoomLevel = 1;
-let cropOriginalSrc = '';
-let cropTipo = 'perfil'; // 'perfil' o 'consultorio'
-let fotosConsultorioActuales = [];
+let cropCallback=null;
+let cropZoomLevel=1;
+let cropOriginalSrc='';
+let cropTipo='perfil';
+let fotosConsultorioActuales=[];
 
 function abrirSelectorFoto(tipo){
-  cropTipo = tipo;
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'image/*';
-  if(tipo === 'consultorio') input.multiple = true;
-  input.onchange = (e) => procesarFotosSeleccionadas(e.target.files, tipo);
+  cropTipo=tipo;
+  const input=document.createElement('input');
+  input.type='file';input.accept='image/*';
+  if(tipo==='consultorio')input.multiple=true;
+  input.onchange=(e)=>procesarFotosSeleccionadas(e.target.files,tipo);
   input.click();
 }
 
-function procesarFotosSeleccionadas(files, tipo){
-  if(!files || !files.length) return;
-  if(tipo === 'perfil'){
-    const file = files[0];
-    const reader = new FileReader();
-    reader.onload = (e) => abrirCropModal(e.target.result, 'perfil');
-    reader.readAsDataURL(file);
-  } else {
-    // Para consultorio procesamos todas las fotos
-    Array.from(files).slice(0, 6).forEach(file => {
-      const reader = new FileReader();
-      reader.onload = (e) => abrirCropModal(e.target.result, 'consultorio');
-      reader.readAsDataURL(file);
-    });
-  }
+function procesarFotosSeleccionadas(files,tipo){
+  if(!files||!files.length)return;
+  if(tipo==='perfil'){const file=files[0];const reader=new FileReader();reader.onload=(e)=>abrirCropModal(e.target.result,'perfil');reader.readAsDataURL(file);}
+  else{Array.from(files).slice(0,6).forEach(file=>{const reader=new FileReader();reader.onload=(e)=>abrirCropModal(e.target.result,'consultorio');reader.readAsDataURL(file);});}
 }
 
-function abrirCropModal(src, tipo){
-  cropOriginalSrc = src;
-  cropZoomLevel = 1;
-  cropTipo = tipo;
-  const modal = document.getElementById('crop-modal');
-  const img = document.getElementById('crop-img');
-  const overlay = document.getElementById('crop-overlay');
-  const titulo = document.getElementById('crop-titulo');
-  const hint = document.getElementById('crop-hint');
-  img.src = src;
-  img.style.transform = 'scale(1)';
-  titulo.textContent = tipo === 'perfil' ? 'Ajustar foto de perfil' : 'Ajustar foto del consultorio';
-  hint.textContent = tipo === 'perfil' ? 'Arrastra para centrar · usa + / − para el zoom' : 'Ajusta el encuadre de la foto';
-  overlay.style.display = tipo === 'perfil' ? 'block' : 'none';
-  modal.style.display = 'flex';
-  // Arrastre
-  let isDragging = false, startX, startY, posX = 0, posY = 0;
-  img.onmousedown = img.ontouchstart = (e) => {
-    isDragging = true;
-    const pt = e.touches ? e.touches[0] : e;
-    startX = pt.clientX - posX;
-    startY = pt.clientY - posY;
-    e.preventDefault();
-  };
-  document.onmousemove = document.ontouchmove = (e) => {
-    if(!isDragging) return;
-    const pt = e.touches ? e.touches[0] : e;
-    posX = pt.clientX - startX;
-    posY = pt.clientY - startY;
-    img.style.transform = `scale(${cropZoomLevel}) translate(${posX/cropZoomLevel}px, ${posY/cropZoomLevel}px)`;
-    e.preventDefault();
-  };
-  document.onmouseup = document.ontouchend = () => { isDragging = false; };
+function abrirCropModal(src,tipo){
+  cropOriginalSrc=src;cropZoomLevel=1;cropTipo=tipo;
+  const modal=document.getElementById('crop-modal');
+  const img=document.getElementById('crop-img');
+  const overlay=document.getElementById('crop-overlay');
+  const titulo=document.getElementById('crop-titulo');
+  const hint=document.getElementById('crop-hint');
+  img.src=src;img.style.transform='scale(1)';
+  titulo.textContent=tipo==='perfil'?'Ajustar foto de perfil':'Ajustar foto del consultorio';
+  hint.textContent=tipo==='perfil'?'Arrastra para centrar · usa + / − para el zoom':'Ajusta el encuadre de la foto';
+  overlay.style.display=tipo==='perfil'?'block':'none';
+  modal.style.display='flex';
+  let isDragging=false,startX,startY,posX=0,posY=0;
+  img.onmousedown=img.ontouchstart=(e)=>{isDragging=true;const pt=e.touches?e.touches[0]:e;startX=pt.clientX-posX;startY=pt.clientY-posY;e.preventDefault();};
+  document.onmousemove=document.ontouchmove=(e)=>{if(!isDragging)return;const pt=e.touches?e.touches[0]:e;posX=pt.clientX-startX;posY=pt.clientY-startY;img.style.transform=`scale(${cropZoomLevel}) translate(${posX/cropZoomLevel}px, ${posY/cropZoomLevel}px)`;e.preventDefault();};
+  document.onmouseup=document.ontouchend=()=>{isDragging=false;};
 }
 
 function cropZoom(delta){
-  cropZoomLevel = Math.max(0.5, Math.min(3, cropZoomLevel + delta));
-  const img = document.getElementById('crop-img');
-  const current = img.style.transform;
-  const translateMatch = current.match(/translate\(([^,]+)px,\s*([^)]+)px\)/);
-  if(translateMatch){
-    img.style.transform = `scale(${cropZoomLevel}) translate(${translateMatch[1]}px, ${translateMatch[2]}px)`;
-  } else {
-    img.style.transform = `scale(${cropZoomLevel})`;
-  }
+  cropZoomLevel=Math.max(0.5,Math.min(3,cropZoomLevel+delta));
+  const img=document.getElementById('crop-img');
+  const current=img.style.transform;
+  const translateMatch=current.match(/translate\(([^,]+)px,\s*([^)]+)px\)/);
+  if(translateMatch){img.style.transform=`scale(${cropZoomLevel}) translate(${translateMatch[1]}px, ${translateMatch[2]}px)`;}
+  else{img.style.transform=`scale(${cropZoomLevel})`;}
 }
 
-function cerrarCropModal(){
-  document.getElementById('crop-modal').style.display = 'none';
-  document.onmousemove = null;
-  document.ontouchmove = null;
-}
+function cerrarCropModal(){document.getElementById('crop-modal').style.display='none';document.onmousemove=null;document.ontouchmove=null;}
 
 function confirmarCrop(){
-  const img = document.getElementById('crop-img');
-  // Crear canvas y dibujar la imagen con el zoom/posición actual
-  const canvas = document.createElement('canvas');
-  const SIZE = cropTipo === 'perfil' ? 400 : 800;
-  canvas.width = SIZE;
-  canvas.height = cropTipo === 'perfil' ? SIZE : Math.round(SIZE * 0.75);
-  const ctx = canvas.getContext('2d');
-  // Aplicar transform
-  ctx.save();
-  ctx.translate(canvas.width/2, canvas.height/2);
-  ctx.scale(cropZoomLevel, cropZoomLevel);
-  const ratio = Math.min(SIZE / img.naturalWidth, SIZE / img.naturalHeight) * cropZoomLevel;
-  const w = img.naturalWidth;
-  const h = img.naturalHeight;
-  const drawW = w * (SIZE/Math.max(w,h));
-  const drawH = h * (SIZE/Math.max(w,h));
-  ctx.drawImage(img, -drawW/2, -drawH/2, drawW, drawH);
-  ctx.restore();
-  const base64 = canvas.toDataURL('image/jpeg', 0.85);
+  const img=document.getElementById('crop-img');
+  const canvas=document.createElement('canvas');
+  const SIZE=cropTipo==='perfil'?400:800;
+  canvas.width=SIZE;canvas.height=cropTipo==='perfil'?SIZE:Math.round(SIZE*0.75);
+  const ctx=canvas.getContext('2d');
+  ctx.save();ctx.translate(canvas.width/2,canvas.height/2);ctx.scale(cropZoomLevel,cropZoomLevel);
+  const w=img.naturalWidth,h=img.naturalHeight;
+  const drawW=w*(SIZE/Math.max(w,h));const drawH=h*(SIZE/Math.max(w,h));
+  ctx.drawImage(img,-drawW/2,-drawH/2,drawW,drawH);ctx.restore();
+  const base64=canvas.toDataURL('image/jpeg',0.85);
   cerrarCropModal();
-  if(cropTipo === 'perfil'){
-    document.getElementById('sp-foto').value = base64;
-    const preview = document.getElementById('sp-foto-preview');
-    if(preview) preview.innerHTML = `<img src="${base64}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+  if(cropTipo==='perfil'){
+    document.getElementById('sp-foto').value=base64;
+    const preview=document.getElementById('sp-foto-preview');
+    if(preview)preview.innerHTML=`<img src="${base64}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
     showToast('Foto de perfil lista ✓');
-  } else {
+  }else{
     fotosConsultorioActuales.push(base64);
-    const urls = fotosConsultorioActuales.slice(0,6);
-    document.getElementById('sp-fotos').value = urls.join('\n');
+    const urls=fotosConsultorioActuales.slice(0,6);
+    document.getElementById('sp-fotos').value=urls.join('\n');
     actualizarPreviewFotosArray(urls);
     showToast(`Foto ${fotosConsultorioActuales.length} agregada ✓`);
   }
 }
 
 function actualizarPreviewFoto(url){
-  const preview = document.getElementById('sp-foto-preview');
-  if(!preview) return;
-  if(url){ preview.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.parentElement.innerHTML='👤'">`; }
-  else { preview.innerHTML = '👤'; }
+  const preview=document.getElementById('sp-foto-preview');if(!preview)return;
+  if(url){preview.innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.parentElement.innerHTML='👤'">`;}
+  else{preview.innerHTML='👤';}
 }
 
 function actualizarPreviewFotos(){
-  const urls = document.getElementById('sp-fotos').value.trim().split('\n').filter(u=>u.trim());
-  fotosConsultorioActuales = urls;
-  actualizarPreviewFotosArray(urls);
+  const urls=document.getElementById('sp-fotos').value.trim().split('\n').filter(u=>u.trim());
+  fotosConsultorioActuales=urls;actualizarPreviewFotosArray(urls);
 }
 
 function actualizarPreviewFotosArray(urls){
-  const container = document.getElementById('sp-fotos-preview');
-  if(!container) return;
-  if(!urls.length){ container.innerHTML=''; return; }
-  container.innerHTML = urls.slice(0,6).map((u,i)=>`
+  const container=document.getElementById('sp-fotos-preview');if(!container)return;
+  if(!urls.length){container.innerHTML='';return;}
+  container.innerHTML=urls.slice(0,6).map((u,i)=>`
     <div style="position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--bg);">
       <img src="${u}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
       <button onclick="eliminarFotoConsultorio(${i})" style="position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,0.6);color:white;border:none;cursor:pointer;font-size:10px;line-height:1;display:flex;align-items:center;justify-content:center;">✕</button>
@@ -1808,11 +1920,9 @@ function actualizarPreviewFotosArray(urls){
 }
 
 function eliminarFotoConsultorio(idx){
-  const urls = document.getElementById('sp-fotos').value.trim().split('\n').filter(u=>u.trim());
-  urls.splice(idx,1);
-  fotosConsultorioActuales = urls;
-  document.getElementById('sp-fotos').value = urls.join('\n');
-  actualizarPreviewFotosArray(urls);
+  const urls=document.getElementById('sp-fotos').value.trim().split('\n').filter(u=>u.trim());
+  urls.splice(idx,1);fotosConsultorioActuales=urls;
+  document.getElementById('sp-fotos').value=urls.join('\n');actualizarPreviewFotosArray(urls);
 }
 
 function selVideo(v){
@@ -1858,12 +1968,8 @@ async function guardarPerfilPublico(){
   c.perfil.bancoNum=document.getElementById('sp-banco-num').value.trim();
   c.perfil.bancoTitular=document.getElementById('sp-banco-titular').value.trim();
   c.perfil.bancoImg=document.getElementById('sp-banco-img').value.trim();
-  c.perfil.estrellas=spStars;
-  c.perfil.visible=spVisibilidad;
-  await guardarClientesDB();
-  cerrarSheets();
-  showToast('Perfil actualizado ✓');
-  renderClientesAsync();
+  c.perfil.estrellas=spStars;c.perfil.visible=spVisibilidad;
+  await guardarClientesDB();cerrarSheets();showToast('Perfil actualizado ✓');renderClientesAsync();
 }
 
 // ══════════════════════════════════════════
@@ -1876,8 +1982,7 @@ function abrirNuevoPaciente(){
   document.getElementById('btn-cancelar-pac').style.display='flex';
   document.getElementById('btn-guardar-pac').textContent='Registrar';
   ['f-nom','f-tel','f-fecha','f-trat','f-notas'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  renderEstadoBtns('interesado');
-  renderQuickTags();
+  renderEstadoBtns('interesado');renderQuickTags();
   abrirSheet('sheet-pac');
 }
 
@@ -1893,21 +1998,16 @@ function abrirPaciente(id){
   document.getElementById('f-trat').value=p.tratamiento||'';
   document.getElementById('f-fecha').value=p.fecha||'';
   document.getElementById('f-notas').value=p.notas||'';
-  renderEstadoBtns(p.estado);
-  renderQuickTags();
+  renderEstadoBtns(p.estado);renderQuickTags();
   abrirSheet('sheet-pac');
 }
 
-function renderEstadoBtns(sel){
-  estadoSel=sel;
-  document.getElementById('estado-btns').innerHTML=ESTADOS.map(e=>
-    `<button class="est-btn ${sel===e.v?'sel-'+e.v:''}" onclick="selEstado('${e.v}',this)">${e.lbl}</button>`).join('');
-}
+function renderEstadoBtns(sel){estadoSel=sel;document.getElementById('estado-btns').innerHTML=ESTADOS.map(e=>`<button class="est-btn ${sel===e.v?'sel-'+e.v:''}" onclick="selEstado('${e.v}',this)">${e.lbl}</button>`).join('');}
 function selEstado(v,el){estadoSel=v;document.querySelectorAll('#estado-btns .est-btn').forEach(b=>b.className='est-btn');el.className='est-btn sel-'+v;}
 
 function renderQuickTags(){
   const el=document.getElementById('quick-tags');
-  if(el) el.innerHTML=(clienteActual.campanias||[]).map(t=>`<button style="padding:5px 10px;border-radius:8px;border:1.5px solid var(--bord);background:white;font-size:11px;cursor:pointer;color:var(--t2);" onclick="document.getElementById('f-trat').value='${t.replace(/'/g,"\\'")}'">+ ${t}</button>`).join('');
+  if(el)el.innerHTML=(clienteActual.campanias||[]).map(t=>`<button style="padding:5px 10px;border-radius:8px;border:1.5px solid var(--bord);background:white;font-size:11px;cursor:pointer;color:var(--t2);" onclick="document.getElementById('f-trat').value='${t.replace(/'/g,"\\'")}'">+ ${t}</button>`).join('');
 }
 
 async function guardarPaciente(silencioso=false){
@@ -1950,13 +2050,13 @@ async function procesarConIA(){
     const res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:`Extrae datos médicos de este texto. Responde SOLO JSON sin markdown ni texto extra.
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:`Extrae datos médicos de este texto. Responde SOLO JSON sin markdown.
 
 Texto: "${texto}"
 
 JSON: {"nombre":"nombre propio del paciente o null","tel":"solo dígitos del teléfono o null","estado":"interesado|agendado|seguimiento","campania":"campaña o motivo médico o null","fecha":"YYYY-MM-DDTHH:MM o null","observaciones":"síntomas y notas o null"}
 
-REGLAS: nombre es el nombre propio de la persona paciente (no el doctor). tel son solo los dígitos. Si hay fecha/hora → estado agendado. Si dice seguimiento/control → seguimiento. Si no → interesado.`}]})
+REGLAS: nombre es el nombre propio de la persona paciente. tel son solo los dígitos. Si hay fecha/hora → estado agendado. Si dice seguimiento/control → seguimiento. Si no → interesado.`}]})
     });
     if(!res.ok)throw new Error(res.status);
     const data=await res.json();
@@ -2047,12 +2147,10 @@ async function agregarCitaGCalSilencioso(p){
 }
 
 async function agregarCitaGCal(){
-  // Si es paciente nuevo (no guardado aún), guardar primero
   if(!pacSelId||!modoEdicion){
     const fechaVal=document.getElementById('f-fecha').value;
     if(!fechaVal){showToast('Agrega la fecha de la cita primero',true);return;}
-    await guardarPaciente(true); // guardar silencioso
-    // Esperar a que pacSelId se asigne
+    await guardarPaciente(true);
     await new Promise(r=>setTimeout(r,400));
   }
   const p=pacientes.find(x=>String(x.id)===String(pacSelId));
@@ -2069,8 +2167,7 @@ async function agregarCitaGCal(){
 function abrirLightbox(src){
   const lb=document.getElementById('lightbox');
   document.getElementById('lightbox-img').src=src;
-  lb.style.display='flex';
-  document.body.style.overflow='hidden';
+  lb.style.display='flex';document.body.style.overflow='hidden';
 }
 function cerrarLightbox(){
   document.getElementById('lightbox').style.display='none';
@@ -2096,13 +2193,7 @@ async function iniciar(){
 if(window.firebaseReady)iniciar();
 else{
   document.addEventListener('firebase-ready',iniciar);
-  // Si Firebase tarda más de 4 segundos, mostrar igual
-  setTimeout(()=>{
-    if(document.getElementById('loading-screen').style.display!=='none'){
-      console.warn('Firebase tardó demasiado, mostrando app con datos vacíos');
-      mostrarDirectorio();
-    }
-  },4000);
+  setTimeout(()=>{if(document.getElementById('loading-screen').style.display!=='none'){console.warn('Firebase timeout');mostrarDirectorio();}},4000);
 }
 </script>
 </body>
