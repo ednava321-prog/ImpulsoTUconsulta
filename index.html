@@ -719,7 +719,8 @@ const PILL={
 };
 
 function tRel(ts){if(!ts)return'';const d=Math.floor((Date.now()-ts)/1000);if(d<60)return'Ahora';if(d<3600)return'Hace '+Math.floor(d/60)+'min';if(d<86400)return'Hace '+Math.floor(d/3600)+'h';return'Hace '+Math.floor(d/86400)+'d';}
-function fmtF(s){if(!s)return'Sin cita';try{return new Date(s).toLocaleString('es-MX',{weekday:'short',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});}catch{return s;}}
+function fmtF(s){if(!s)return'
+  Sin cita';try{return new Date(s).toLocaleString('es-MX',{weekday:'short',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});}catch{return s;}}
 function hoy(){return new Date().toISOString().slice(0,10);}
 function semanaKey(){const d=new Date();const day=d.getDay()||7;d.setDate(d.getDate()-day+1);return d.toISOString().slice(0,10);}
 function genId(){return'c'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);}
@@ -1722,7 +1723,7 @@ async function guardarCliente(){
     showToast(`${nombre} actualizado ✓`);
   }else{
     if(clientesDB.find(x=>x.pin===pin)){showToast('PIN ya en uso.',true);return;}
-    clientesDB.push({id:genId(),nombre,esp,ini,pin,email,bg:colorSelBg,fg:colorSelFg,activo:true,campanias,perfil:{visible:false,estrellas:5}});
+    clientesDB.push({id:genId(),nombre,esp,ini,pin,email,bg:colorSelBg,fg:colorSelFg,activo:true,campanias,perfil:{visible:true,estrellas:5}
     showToast(`✓ ${nombre} agregado · PIN: ${pin}`);
   }
   await guardarClientesDB();
