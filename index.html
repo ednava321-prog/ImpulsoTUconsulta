@@ -1840,30 +1840,8 @@ function abrirSelectorFoto(tipo){
 
 function procesarFotosSeleccionadas(files,tipo){
   if(!files||!files.length)return;
-  const comprimirImagen=(file,maxSize=600)=>new Promise(resolve=>{
-    const reader=new FileReader();
-    reader.onload=e=>{
-      const img=new Image();
-      img.onload=()=>{
-        const canvas=document.createElement('canvas');
-        let w=img.width,h=img.height;
-        if(w>h){if(w>maxSize){h=h*(maxSize/w);w=maxSize;}}
-        else{if(h>maxSize){w=w*(maxSize/h);h=maxSize;}}
-        canvas.width=w;canvas.height=h;
-        canvas.getContext('2d').drawImage(img,0,0,w,h);
-        resolve(canvas.toDataURL('image/jpeg',0.7));
-      };
-      img.src=e.target.result;
-    };
-    reader.readAsDataURL(file);
-  });
-  if(tipo==='perfil'){
-    comprimirImagen(files[0],600).then(src=>abrirCropModal(src,'perfil'));
-  }else{
-    Array.from(files).slice(0,6).forEach(file=>{
-      comprimirImagen(file,800).then(src=>abrirCropModal(src,'consultorio'));
-    });
-  }
+  if(tipo==='perfil'){const file=files[0];const reader=new FileReader();reader.onload=(e)=>abrirCropModal(e.target.result,'perfil');reader.readAsDataURL(file);}
+  else{Array.from(files).slice(0,6).forEach(file=>{const reader=new FileReader();reader.onload=(e)=>abrirCropModal(e.target.result,'consultorio');reader.readAsDataURL(file);});}
 }
 
 function abrirCropModal(src,tipo){
