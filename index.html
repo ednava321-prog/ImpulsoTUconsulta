@@ -1723,7 +1723,7 @@ async function guardarCliente(){
     showToast(`${nombre} actualizado ✓`);
   }else{
     if(clientesDB.find(x=>x.pin===pin)){showToast('PIN ya en uso.',true);return;}
-    clientesDB.push({id:genId(),nombre,esp,ini,pin,email,bg:colorSelBg,fg:colorSelFg,activo:true,campanias,perfil:{visible:true,estrellas:5}
+    clientesDB.push({id:genId(),nombre,esp,ini,pin,email,bg:colorSelBg,fg:colorSelFg,activo:true,campanias,perfil:{visible:true,estrellas:5}});
     showToast(`✓ ${nombre} agregado · PIN: ${pin}`);
   }
   await guardarClientesDB();
