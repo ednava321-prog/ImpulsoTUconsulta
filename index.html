@@ -659,6 +659,7 @@ const app=initializeApp(cfg);const db=getFirestore(app);
 window.dbGet=async k=>{try{const s=await getDoc(doc(db,'data',k));return s.exists()?s.data().value:null;}catch{return null;}};
 window.dbSet=async(k,v)=>{try{await setDoc(doc(db,'data',k),{value:v});return true;}catch{return false;}};
 window.dbDel=async k=>{try{await deleteDoc(doc(db,'data',k));return true;}catch{return false;}};
+window.subirFoto=async(base64)=>{try{const fd=new FormData();fd.append('file',base64);fd.append('upload_preset','impulso_fotos');fd.append('cloud_name','dbi0kf99g');const r=await fetch('https://api.cloudinary.com/v1_1/dbi0kf99g/image/upload',{method:'POST',body:fd});const d=await r.json();return d.secure_url||null;}catch(e){console.error('Cloudinary error:',e);return null;}};
 window.firebaseReady=true;document.dispatchEvent(new Event('firebase-ready'));
 </script>
 
@@ -1722,7 +1723,7 @@ async function guardarCliente(){
     showToast(`${nombre} actualizado ✓`);
   }else{
     if(clientesDB.find(x=>x.pin===pin)){showToast('PIN ya en uso.',true);return;}
-    clientesDB.push({id:genId(),nombre,esp,ini,pin,email,bg:colorSelBg,fg:colorSelFg,activo:true,campanias,perfil:{visible:true,estrellas:5}});
+    clientesDB.push({id:genId(),nombre,esp,ini,pin,email,bg:colorSelBg,fg:colorSelFg,activo:true,campanias,perfil:{visible:false,estrellas:5}});
     showToast(`✓ ${nombre} agregado · PIN: ${pin}`);
   }
   await guardarClientesDB();
@@ -1872,7 +1873,7 @@ function cropZoom(delta){
 
 function cerrarCropModal(){document.getElementById('crop-modal').style.display='none';document.onmousemove=null;document.ontouchmove=null;}
 
-function confirmarCrop(){
+async function confirmarCrop(){
   const img=document.getElementById('crop-img');
   const canvas=document.createElement('canvas');
   const SIZE=cropTipo==='perfil'?400:800;
@@ -1882,19 +1883,30 @@ function confirmarCrop(){
   const w=img.naturalWidth,h=img.naturalHeight;
   const drawW=w*(SIZE/Math.max(w,h));const drawH=h*(SIZE/Math.max(w,h));
   ctx.drawImage(img,-drawW/2,-drawH/2,drawW,drawH);ctx.restore();
-  const base64=canvas.toDataURL('image/jpeg',0.85);
+  const base64=canvas.toDataURL('image/jpeg',0.75);
   cerrarCropModal();
+  showToast('Subiendo foto...');
   if(cropTipo==='perfil'){
-    document.getElementById('sp-foto').value=base64;
-    const preview=document.getElementById('sp-foto-preview');
-    if(preview)preview.innerHTML=`<img src="${base64}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
-    showToast('Foto de perfil lista ✓');
+    const url=await window.subirFoto(base64);
+    if(url){
+      document.getElementById('sp-foto').value=url;
+      const preview=document.getElementById('sp-foto-preview');
+      if(preview)preview.innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+      showToast('Foto de perfil lista ✓');
+    }else{
+      document.getElementById('sp-foto').value=base64;
+      const preview=document.getElementById('sp-foto-preview');
+      if(preview)preview.innerHTML=`<img src="${base64}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+      showToast('Foto lista ✓');
+    }
   }else{
-    fotosConsultorioActuales.push(base64);
+    const url=await window.subirFoto(base64);
+    const finalUrl=url||base64;
+    fotosConsultorioActuales.push(finalUrl);
     const urls=fotosConsultorioActuales.slice(0,6);
     document.getElementById('sp-fotos').value=urls.join('\n');
     actualizarPreviewFotosArray(urls);
-    showToast(`Foto ${fotosConsultorioActuales.length} agregada ✓`);
+    showToast(`Foto ${fotosConsultorioActuales.length} lista ✓`);
   }
 }
 
